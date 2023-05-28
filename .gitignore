@@ -1,4 +1,6 @@
 out
 .vs
+.idea
+cmake-build-debug
 debug
 release
