@@ -2,23 +2,31 @@
 // Created by tomjojo on 2023/5/30.
 //
 
-#ifndef BACKEND_HEADER_H
-#define BACKEND_HEADER_H
+#pragma once
 
+#include<map>
 #include<iostream>
 #include<vector>
+#include<queue>
+#include<set>
 #include<stdlib.h>
 #include<algorithm>
 
 using namespace std;
 
-enum Stat{
+enum Status{
     PARALYSIS,
     BURN,
     POISON,
 };
 
-enum Types{
+//map<string, Stat> toStatus = {
+//    { "PAR", PARALYSIS },
+//    { "BRN", BURN },
+//    { "PSN", POISON }
+//};
+
+enum Type{
     Normal,
     Fire,
     Water,
@@ -36,7 +44,6 @@ enum Types{
     Dragon,
     Dark,
     Steel,
-    Fairy
+    Fairy,
+    TYPE_COUNT
 };
-
-#endif //BACKEND_HEADER_H
