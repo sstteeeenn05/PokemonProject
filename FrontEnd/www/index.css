@@ -1,0 +1,47 @@
+[x-cloak] {
+    display: none !important;
+}
+
+body{
+    font-family: fantasy;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("assets/lobbyBackground.jpg");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-box{
+    display: flex;
+    flex-flow: column;
+    background-color: white;
+    border-radius: 16px;
+    padding: 16px;
+}
+
+.title{
+    text-align: center;
+    font-size: xx-large;
+}
+
+.option-button{
+    all: unset;
+    margin: 10px 0 0 0;
+    width: 300px;
+    height: 40px;
+    font-size: x-large;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    background: mediumseagreen;
+    cursor: pointer;
+}
+
+.option-button:hover{
+    background: #1e9553;
+}
+
+.option-button:active{
+    background: #0a813f;
+}
