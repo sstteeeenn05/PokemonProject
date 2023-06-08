@@ -2,6 +2,7 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="index.css">
+	<link rel="stylesheet" href="modal.css">
 	<script defer src="index.js" type="module"></script>
 	<title>Lobby</title>
 </head>
@@ -9,7 +10,7 @@
 <div class="main" x-data x-cloak>
 	<div class="input-box">
 		<span class="title">Pokémon Battle</span>
-		<button class="option-button">Normal Mode</button>
+		<button class="option-button" @click="$store.modal.openNormalModal">Normal Mode</button>
 		<button class="option-button">Test Mode</button>
 	</div>
 
@@ -29,5 +30,17 @@
 		<p>OH MY GOD.</p>
 	</div>
 </div>
+<dialog class="input-modal" x-data id="normal">
+	<input class="modal-input" x-modal="$store.pokemonLibs.get('pokemonFile')" type="text" placeholder="pokemon library name">
+	<input class="modal-input" x-modal="$store.pokemonLibs.get('skillFile')" type="text" placeholder="skill library name">
+	<input class="modal-input" x-modal="$store.pokemonLibs.get('gameFile')" type="text" placeholder="game file name">
+	<div class="button-section">
+		<button class="modal-button confirm">confirm</button>
+		<button class="modal-button cancel">cancel</button>
+	</div>
+</dialog>
+<dialog class="input-modal" x-data id="test">
+
+</dialog>
 </body>
 </html>
