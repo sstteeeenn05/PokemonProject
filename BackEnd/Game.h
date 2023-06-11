@@ -37,10 +37,11 @@ public:
     void addPokemon(Pokemon&);
     void reset();
     queue<string> move(string, string, string, Type, bool, int, int, Status);
-    double calcTypeEff(Type, vector<Type>&);
+    double calcTypeEff(Type, vector<Type>);
     void print();
 
     Game(Pokemon& pokemon1,Pokemon& pokemon2);
     void attack(string name,vector<string> type, string moveType,int power,int accuracy);
     double typeCount();
+
 };

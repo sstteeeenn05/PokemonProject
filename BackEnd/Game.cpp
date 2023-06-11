@@ -4,7 +4,7 @@
 #include "Game.h"
 
 void Game::addPokemon(Pokemon& pokemon) {
-    pokemons[pokemon.getName()] = pokemon;
+    pokemons[pokemon.name] = pokemon;
 }
 
 void Game::reset() {
@@ -17,23 +17,25 @@ queue<string> Game::move(string who, string target, string name, Type type, bool
     Pokemon& atk = pokemons[who];
     Pokemon& def = pokemons[target];
 
-    int A = isPhysical ? atk.getAtk() : def.getSpAtk();
-    int D = isPhysical ? atk.getDef() : def.getSpDef();
+    int A = isPhysical ? atk.atk : def.spAtk;
+    int D = isPhysical ? atk.def : def.spDef;
 
     bool isCritical = rand() & 1;
 
-    auto& types = atk.getType();
+    vector<Type> types = atk.type;
     bool isStab = find(types.cbegin(), types.cend(), type) != types.cend();
 
-    int damage = ((double)(2 * atk.getLevel() + 10) / 250.0 * power * ((double)A / D) + 2) * (isCritical ? 1.5 : 1) * (isStab ? 1.5 : 1) * calcTypeEff(type, def.getType());
+    int damage = ((2.0 * atk.level + 10) / 250.0 * power * (A / D) + 2) * (isCritical ? 1.5 : 1) * (isStab ? 1.5 : 1) * calcTypeEff(type, def.type);
     def.damage(damage);
     
     def.addStatus(status);
-    if (def.hasStatus(POISON)) def.damage(def.getMaxHp() / 16);
-    if (def.hasStatus(BURN)) def.damage(def.getMaxHp() / 16);
+    if (def.hasStatus(POISON)) def.damage(def.maxHp / 16);
+    if (def.hasStatus(BURN)) def.damage(def.maxHp / 16);
+
+    return queue<string>({ "avoided the attack!" });
 }
 
-double Game::calcTypeEff(Type atk, vector<Type>& defs) {
+double Game::calcTypeEff(Type atk, vector<Type> defs) {
     double value = 1;
     for (auto def : defs) value *= typeEff[atk][def];
     return value;
@@ -42,10 +44,10 @@ double Game::calcTypeEff(Type atk, vector<Type>& defs) {
 void Game::print() {
     for (int i = 0; i < TYPE_COUNT; i++) {
         for (int j = 0; j < TYPE_COUNT; j++) {
-            if (typeEff[i][j] == 2) printf("¡´");
-            if (typeEff[i][j] == 1) printf("¡@");
-            if (typeEff[i][j] == 0.5) printf("¡¿");
-            if (typeEff[i][j] == 0) printf("¡³");
+            if (typeEff[i][j] == 2) printf("ï¿½ï¿½");
+            if (typeEff[i][j] == 1) printf("ï¿½@");
+            if (typeEff[i][j] == 0.5) printf("ï¿½ï¿½");
+            if (typeEff[i][j] == 0) printf("ï¿½ï¿½");
         }
         puts("");
     }
@@ -57,15 +59,15 @@ void Game::attack(string name, vector<string> type, string moveType, int power, 
 
     // Define which pokemon
     Pokemon &atkPokemon = pokemon[0],&defPokemon = pokemon[1];
-    if(pokemon[1].getName() == name){
+    if(pokemon[1].name == name){
         atkPokemon = pokemon[1];
         defPokemon = pokemon[0];
     }
 
-    int A = atkPokemon.getAtk(),D = atkPokemon.getDef();
+    int A = atkPokemon.atk,D = atkPokemon.def;
     if(moveType == "Special") {
-        A = atkPokemon.getSpAtk();
-        D = atkPokemon.getSpDef();
+        A = atkPokemon.spAtk;
+        D = atkPokemon.spDef;
     }
 
     //Temp
@@ -84,7 +86,7 @@ void Game::attack(string name, vector<string> type, string moveType, int power, 
 
 
 
-    double damage = ((((2 * atkPokemon.getLevel() + 10) / 250) * power *  A / D) + 2) * critical * STAB * Type;
+    double damage = ((((2.0 * atkPokemon.level + 10) / 250) * power *  A / D) + 2) * critical * STAB * Type;
 
     defPokemon.damage((int)damage);
 }
@@ -97,3 +99,5 @@ Game::Game(Pokemon& pokemon1, Pokemon& pokemon2) {
     pokemon.push_back((pokemon1));
     pokemon.push_back((pokemon2));
 }
+
+

@@ -6,11 +6,15 @@
 
 #include<map>
 #include<iostream>
+#include<fstream>
 #include<vector>
 #include<queue>
 #include<set>
 #include<stdlib.h>
 #include<algorithm>
+#include<string>
+#include<sstream>
+#include<exception>
 
 using namespace std;
 

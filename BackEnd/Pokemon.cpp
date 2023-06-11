@@ -21,41 +21,6 @@ void Pokemon::init(int deltaHp, set<Status> _statusList) {
     statusList = _statusList;
 }
 
-string Pokemon::getName() const {
-    return name;
-}
-
-vector<Type> Pokemon::getType() const {
-    return type;
-}
-
-int Pokemon::getMaxHp() const {
-    return maxHp;
-}
-
-int Pokemon::getHp() const {
-    return hp;
-}
-
-int Pokemon::getAtk() const {
-    return atk;
-}
-
-int Pokemon::getDef() const {
-    return def;
-}
-
-int Pokemon::getSpAtk() const {
-    return spAtk;
-}
-
-int Pokemon::getSpDef() const {
-    return spDef;
-}
-
-int Pokemon::getLevel() const {
-    return level;
-}
 
 void Pokemon::heal(int offset) {
     hp += offset;

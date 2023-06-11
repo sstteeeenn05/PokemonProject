@@ -7,6 +7,7 @@
 #include"Header.h"
 
 class Pokemon{
+public:
     string name;
     vector<Type> type;
     int maxHp;
@@ -21,7 +22,7 @@ class Pokemon{
     int exp;
 
     set<Status> statusList;
-public:
+
     Pokemon() = default;
     Pokemon(string _name, vector<Type> _type, int _hp, int _atk, int _def, int _spAtk, int _spDef, int _speed,int _level,int _exp);
     void init(int, set<Status>);

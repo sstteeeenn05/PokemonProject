@@ -4,3 +4,4 @@ out
 cmake-build-debug
 debug
 release
+node_modules
