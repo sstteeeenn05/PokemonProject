@@ -29,19 +29,16 @@ class Game{
         {1,0.5,0.5,0.5,1,2,1,1,1,1,1,1,2,1,1,1,0.5,2},
         {1,0.5,1,1,1,1,2,0.5,1,1,1,1,1,1,2,2,0.5,1}
     };
-    vector<Pokemon> pokemon;
     map<string, Pokemon> pokemons;
 
 public:
     Game() = default;
+    Game(Pokemon& ,Pokemon& );
+    void init(Pokemon ,Pokemon );
+    queue<string> move(string, string, Type, bool, int, int, Status);
     void addPokemon(Pokemon&);
     void reset();
-    queue<string> move(string, string, string, Type, bool, int, int, Status);
     double calcTypeEff(Type, vector<Type>);
     void print();
-
-    Game(Pokemon& pokemon1,Pokemon& pokemon2);
-    void attack(string name,vector<string> type, string moveType,int power,int accuracy);
     double typeCount();
-
 };

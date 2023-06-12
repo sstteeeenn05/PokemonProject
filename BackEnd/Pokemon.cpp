@@ -11,6 +11,17 @@ Pokemon::Pokemon(
         int _def,
         int _spAtk,
         int _spDef,
+        int _speed
+):name(std::move(_name)),type(std::move(_type)),maxHp(_hp), hp(_hp), atk(_atk), def(_def), spAtk(_spAtk), spDef(_spDef), speed(_speed), level(0), exp(0) {}
+
+Pokemon::Pokemon(
+        string _name,
+        vector<Type> _type,
+        int _hp,
+        int _atk,
+        int _def,
+        int _spAtk,
+        int _spDef,
         int _speed,
         int _level,
         int _exp

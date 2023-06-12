@@ -15,7 +15,7 @@ class commandError : public exception{};
 class GameManager{
 public:
     //name pokemon
-
+    Game game;
     map<string,Type> TypeMap = {
             {"Normal",      Normal},
             {"Fire",        Fire},
@@ -37,21 +37,20 @@ public:
             {"Fairy",       Fairy},
             {"TYPE_COUNT",  TYPE_COUNT},
     };
+    map<string,Status> StatusMap = {
+            {"PARALYSIS",   PARALYSIS},
+            {"BURN",        BURN},
+            {"POISON",      POISON}
+    };
     map<string,Pokemon> pokemonData;
     commandError error;
     char spilt = ';';
+    queue<string> output;
 
-    void readPokemon(const string& path);
-    void readMove(const string& path);
-    void readGame(const string& path);
-
+    Pokemon readPokemon();
+    void readMove();
     void run();
-
-
-
-    void readCase(const string& path);
-    void command();
-    void moveIO();
+    void outputCommand();
 };
 
 #endif //BACKEND_GAMEMANAGER_H
