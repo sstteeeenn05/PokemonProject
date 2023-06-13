@@ -1,6 +1,10 @@
 <?php
     session_start();
-    $_SESSION['pipes']=['stdin'=>"../../node/exe/stdin.txt",'stdout'=>"../../node/exe/stdout.txt",'stderr'=>"../../node/exe/stderr.txt"];
+    $_SESSION['pipes']=array(
+        'stdin'=>$_SERVER['DOCUMENT_ROOT']."/../node/exe/stdin.txt",
+        'stdout'=>$_SERVER['DOCUMENT_ROOT']."/../node/exe/stdout.txt",
+        'stderr'=>$_SERVER['DOCUMENT_ROOT']."/../node/exe/stderr.txt"
+    );
     proc_open(
         "start ../../node/node.exe ../../node/game.js",
         array(
@@ -10,6 +14,6 @@
         ),
         $pipes
     );
-    print_r($_SESSION['pipes']);
+    echo $_SERVER['DOCUMENT_ROOT'];
     echo "lesss goooo";
 ?>
