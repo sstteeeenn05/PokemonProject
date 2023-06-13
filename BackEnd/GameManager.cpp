@@ -30,7 +30,8 @@ vector<string> spilt(string str, char tar){
 
 
 void GameManager::readMove() {
-    string atkPokemon,defPokemon, type, isPhysical, PP, con, conTemp;
+    string atkPokemon,defPokemon, type, PP, con, conTemp;
+    bool isPhysical;
     int power, accuracy;
 
     cin >> atkPokemon >> defPokemon >> type >> isPhysical >> power >> accuracy >> PP;
@@ -41,7 +42,7 @@ void GameManager::readMove() {
         cons.push_back(conTemp);
     }
 
-    output = game.move(atkPokemon,defPokemon,TypeMap[type],stoi(isPhysical),power,accuracy,StatusMap[PP]);
+    output = game.move(atkPokemon,defPokemon,TypeMap[type],isPhysical,power,accuracy,StatusMap[PP]);
 }
 
 Pokemon GameManager::readPokemon(){

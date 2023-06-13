@@ -8,6 +8,7 @@
         public $spatk=0;
         public $spdef=0;
         public $speed=0;
+        public $level=50;
     }
 
     class Move{
