@@ -11,7 +11,7 @@
 	<div class="input-box">
 		<span class="title">Pokémon Battle</span>
 		<button class="option-button" @click="$store.modal.open('normalModal')">Normal Mode</button>
-		<button class="option-button">Test Mode</button>
+		<button class="option-button" @click="$store.modal.open('testModal')">Test Mode</button>
 		<button class="option-button" @click="$store.modal.open('manageModal')">Manage</button>
 		<button class="option-button" @click="$store.db.getAllPokemon()">Test</button>
 	</div>
@@ -32,36 +32,44 @@
 		<p>OH MY GOD.</p>
 	</div>
 </div>
+
 <dialog class="input-modal" x-data id="normalModal">
-	<input class="modal-input" x-modal="$store.pokemonLibs.get('pokemonFile')" type="text" placeholder="pokemon library name">
-	<input class="modal-input" x-modal="$store.pokemonLibs.get('skillFile')" type="text" placeholder="skill library name">
-	<input class="modal-input" x-modal="$store.pokemonLibs.get('gameFile')" type="text" placeholder="game file name">
 	<div class="button-section">
+		<button class="modal-button cancel" @click="$store.modal.close('normalModal')">cancel</button>
 		<button class="modal-button confirm">confirm</button>
-		<button class="modal-button cancel">cancel</button>
 	</div>
 </dialog>
-<dialog class="input-modal" x-data id="manageModal">
+
+<dialog class="input-modal" x-data id="testModal">
+	<input class="modal-input" x-modal="$store.gameFile" type="text" placeholder="game file name">
+	<div class="button-section">
+		<button class="modal-button cancel" @click="$store.modal.close('testModal')">cancel</button>
+		<button class="modal-button confirm">confirm</button>
+	</div>
+</dialog>
+
+<dialog class="modal" x-data id="manageModal">
 	<span class="title">Manage</span>
 	<table>
 		<tr>
 			<td><label for="pokemonLibUploadElement">Pokemon File:</label></td>
-			<td><input id="pokemonLibUploadElement" class="modal-input" type="file"/></td>
-			<td><input type="button" @click="$store.db.upload('PokemonLib','#pokemonLibUploadElement','#status')" value="Upload"/></td>
+			<td><input id="pokemonLibUploadElement" class="modal-file-input" type="file"/></td>
+			<td><input class="modal-button confirm"  type="button" @click="$store.db.upload('PokemonLib','#pokemonLibUploadElement','#status')" value="Upload"/></td>
 			<td></td>
 		</tr>
 		<tr>
 			<td><label for="moveLibUploadElement">Move File:</label></td>
-			<td><input id="moveLibUploadElement" class="modal-input" type="file"/></td>
-			<td><input type="button" @click="$store.db.upload('MoveLib','#moveLibUploadElement','#status')" value="Upload"/></td>
+			<td><input id="moveLibUploadElement" class="modal-file-input" type="file"/></td>
+			<td><input class="modal-button confirm" type="button" @click="$store.db.upload('MoveLib','#moveLibUploadElement','#status')" value="Upload"/></td>
 			<td></td>
 		</tr>
 		<tr>
-			<td colspan="3"><input type="button" @click="$store.db.clear('#status')" value="Clear Database"/></td>
+			<td><span>Update Message:</span></td>
 			<td><span id="status"></span></td>
+			<td colspan="2"><input class="modal-button confirm" type="button" @click="$store.db.clear('#status')" value="Clear Database"/></td>
 		</tr>
 	</table>
-	<button class="modal-button" @click="$store.modal.close('manageModal')">Close</button>
+	<button class="modal-button cancel close" @click="$store.modal.close('manageModal')">Close</button>
 </dialog>
 </body>
 </html>

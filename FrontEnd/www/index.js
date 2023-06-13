@@ -12,11 +12,7 @@ document.addEventListener('alpine:init', ()=>{
 
 document.addEventListener('alpine:init', ()=>{
   Alpine.store('modal', {
-    pokemonLibs: new Map([
-        ['pokemonFile', ''],
-        ['skillFile', ''],
-        ['gameFile', '']
-    ]),
+    gameFile: "",
     open(name) {
       let modal = document.getElementById(name)
       modal.showModal()
