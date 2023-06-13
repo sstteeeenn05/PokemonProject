@@ -3,25 +3,155 @@
 	<meta charset="UTF-8">
 	<title>Battle</title>
 	<link rel="stylesheet" href="BattleRoom.css">
-	<link rel="stylesheet" href="BattleRoom.js">
+	<link rel="stylesheet" href="modal.css">
 	<script defer src="BattleRoom.js" type="module"></script>
 </head>
-<body x-data>
+<body x-data x-cloak>
 <div class="main">
 
+	<img class="enemy-pokemon-img" :src="'./assets/'+$store.modal.potionList[3][0]">
+	<img class="player-pokemon-img" :src="'./assets/'+$store.modal.potionList[2][0]">
+
+	<div class="enemy-info">
+		<div class="info-upper">
+			<div class="pokemon-name-section">
+				<span class="pokemon-name" id="enemy-pokemon-name" x-text="'nani'"></span>
+				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
+					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+				</template>
+			</div>
+
+			<div class="icons">
+				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
+					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+				</template>
+			</div>
+		</div>
+
+		<div class="health-bar">
+			<div class="pokemon-health-out">
+				<div class="pokemon-health-in"></div>
+			</div>
+			<span class="health" x-text="'500/1000'"></span>
+		</div>
+	</div>
+
+	<div class="player-info">
+		<div class="info-upper">
+			<div class="pokemon-name-section">
+				<span class="pokemon-name" id="player-pokemon-name" x-text="'nani'"></span>
+				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
+					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+				</template>
+			</div>
+
+			<div class="icons">
+				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
+					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+				</template>
+			</div>
+		</div>
+		<div class="health-bar">
+			<div class="pokemon-health-out">
+				<div class="pokemon-health-in"></div>
+			</div>
+			<span class="health" x-text="'1000/1000'"></span>
+		</div>
+	</div>
 	<div class="move-menu">
 		<span class="context" x-text="'Nice to meet you'"></span>
-		<table>
-			<tr>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-			</tr>
-		</table>
+		<div class="move-section">
+				<button class="move-button" @click="$store.modal.open('fight')">Fight</button>
+				<button class="move-button" @click="$store.modal.open('bag')">Bag</button>
+				<button class="move-button" @click="$store.modal.open('pokemon')">Pokémon</button>
+				<button class="move-button" @click="location.href = '/';">Exit</button>
+		</div>
 	</div>
 </div>
+
+<dialog class="modal" id="list">
+	<div class="data-list">
+
+		<div class="fight-selection-section" x-show="$store.modal.type === 'fight'">
+			<template x-for="data in $store.modal.listData" :key="index">
+				<div class="fight-data">
+					<div class="skill-title">
+						<h2 x-text="'Water Gun'" style="margin: 0; display: inline-block"></h2>
+						<div>
+							<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
+								<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.skillType[index]">
+							</template>
+						</div>
+					</div>
+					<div class="skill-description">
+						<div class="condition-list">
+							<span style="font-size: x-large; margin-right: 2px">Cons:</span>
+							<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
+								<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.skillCondition[index]">
+							</template>
+						</div>
+						<span class="skill-form" x-text="'Psychical'"></span>
+					</div>
+				</div>
+			</template>
+		</div>
+
+		<div x-show="$store.modal.type === 'bag'">
+			<template x-for="(item, index) in $store.modal.potionList" :key="index">
+				<table class="potion-table" @click="$store.modal.selectingPokemon()">
+					<tr>
+						<td class="Potion-data-img-container">
+							<img class="potion-data-img" :src="'./assets/' + item[0]">
+						</td>
+						<td>
+							<div class="potion-data">
+								<h1 x-text="item[1]" style="margin-top: 0"></h1>
+								<span x-text="item[2]" style="font-size: x-large"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</template>
+		</div>
+
+		<div x-show="$store.modal.type === 'pokemon'">
+			<template x-for="data in $store.modal.listData" :key="index">
+				<table class="pokemon-table">
+					<tr>
+						<td class="pokemon-data-img-container">
+							<img class="pokemon-data-img">
+						</td>
+						<td>
+							<div class="pokemon-data">
+								<div class="pokemon-data-upper">
+									<div class="pokemon-name-section">
+										<span class="pokemon-name" x-text="'nani'"></span>
+										<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
+											<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+										</template>
+									</div>
+									<div class="icons">
+										<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
+											<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+										</template>
+									</div>
+								</div>
+								<div class="health-bar pokemon-data-health-bar">
+									<div class="pokemon-health-out pokemon-data-health-out">
+										<div class="pokemon-health-in"></div>
+									</div>
+									<span class="health pokemon-data-health" x-text="'1000/1000'"></span>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</template>
+		</div>
+
+	</div>
+	<button class="modal-button cancel close" @click="$store.modal.close()">cancel</button>
+</dialog>
+
 </body>
 </html>

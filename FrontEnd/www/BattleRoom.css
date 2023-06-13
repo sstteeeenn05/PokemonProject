@@ -12,30 +12,283 @@ body{
 }
 
 .main{
+    position: relative;
     display: flex;
+    flex-flow: column;
     height: 90vh;
     max-height: 46vw;
     aspect-ratio: 1050 / 540;
     background-image:url("assets/battleBackground.png");
     background-size: cover;
     background-position: top;
+    padding: 2% 2% 0 2%;
+}
+
+.enemy-pokemon-img{
+    position: absolute;
+    right: 20%;
+    top: 13%;
+    width: 25%;
+    aspect-ratio: 1;
+}
+
+.player-pokemon-img{
+    position: absolute;
+    left: 17%;
+    bottom: 12%;
+    width: 25%;
+    aspect-ratio: 1;
+}
+
+.enemy-info{
+    --health-width: 50%;
+    --color-value: 128;
+    z-index: 20;
+    width: 30%;
+    height: 20%;
+    display: flex;
+    flex-flow: column;
+    padding: 1vw 1.5vw 0 1.5vw;
+    box-sizing: border-box;
+    border: black 4px solid;
+    background: wheat;
+    border-radius: 1vw;
+}
+
+.player-info{
+    --health-width: 100%;
+    --color-value: 255;
+    z-index: 20;
+    width: 30%;
+    height: 20%;
+    margin: auto 0 0 auto;
+    display: flex;
+    flex-flow: column;
+    padding: 1vw 1.5vw 0 1.5vw;
+    box-sizing: border-box;
+    border: black 4px solid;
+    background: wheat;
+    border-radius: 1vw;
+}
+
+.info-upper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pokemon-name-section{
+    display: flex;
+    align-items: center;
+}
+
+.pokemon-name, .pokemon-name-section{
+    font-size: 2vw;
+}
+
+.pokemon-name-section::after{
+    content: "lv 69";
+    margin-left: 3vw;
+}
+
+.health-bar{
+    margin: auto 0 auto -.2vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.health{
+    margin-right: auto;
+    margin-left: .3vw;
+    height: auto;
+    font-size: 1.5vw;
+}
+
+.pokemon-health-out {
+    width: 100%;
+    height: 25%;
+    margin-top: 1vw;
+    box-sizing: border-box;
+    border-radius: 100px;
+    background: white;
+    border: black 2px solid;
+}
+
+.pokemon-health-in {
+    width: var(--health-width);
+    box-sizing: border-box;
+    height: 100%;
+    border-radius: 100px;
+    background: rgb(calc(255 - var(--color-value)), var(--color-value), 0);
+    transition: all 0.5s;
 }
 
 .move-menu{
     display: flex;
-    padding: 20px;
+    padding: .75vw;
+    z-index: 20;
     box-sizing: border-box;
     border: black 4px solid;
     border-bottom: none;
     background: wheat;
-    height: 30%;
-    width: 95%;
-    border-radius: 24px 24px 0 0;
-    margin: 0 auto;
+    height: 25%;
+    width: 100%;
+    border-radius: 2vw 2vw 0 0;
+    margin: 1% auto 0 auto;
     justify-self: center;
     align-self: end;
 }
 
 .context{
+    margin: .3vw 0 0 1vw;
+    font-size: 2vw;
+}
+
+.move-section{
+    display: grid;
+    margin: 0 0 0 auto;
+    width: 40%;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+}
+
+.move-button{
+    cursor: pointer;
+    background: white;
+    border: black solid 5px;
+    display: block;
+    margin: auto;
+    font-size: 2vw;
+    box-sizing: border-box;
+    font-family: fantasy;
+    width: 90%;
+    height: 80%;
+    border-radius: 10px;
+}
+
+.move-button:hover{
+    background: lightgray;
+}
+
+.move-button:active{
+    background: gray;
+}
+
+.data-list{
+    width: 30vw;
+}
+
+.fight-selection-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.fight-data{
+    border: mediumseagreen 3px solid;
+    border-radius: 1vw;
+    padding: .5vw 1vw;
+    margin: .5vw;
+}
+
+.skill-title{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-name{
+    font-size: 180%;
+}
+
+.skill-description{
+    display: flex;
+    flex-direction: column;
+}
+
+.condition-list{
+    display: flex;
+    margin-bottom: 8%;
+}
+
+.skill-form{
     font-size: x-large;
+}
+
+.skill-form::after{
+    content: "PP: 10/10";
+    float: right;
+    margin-right: .25vw;
+}
+
+.potion-data{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.pokemon-table, .potion-table{
+    width: 100%;
+    margin: 1vw 0;
+    border: mediumseagreen 3px solid;
+    border-radius: 1vw;
+    padding: 1vw;
+}
+
+.pokemon-table:hover, .potion-table:hover, .fight-data:hover{
+    border: black 3px solid;
+}
+
+.pokemon-data-img-container, .Potion-data-img-container{
+    width: 25%;
+}
+
+.pokemon-data-img, .potion-data-img{
+    pointer-events: none;
+    width: 95%;
+    aspect-ratio: 1;
+    margin: auto;
+}
+
+.pokemon-data{
+    --health-width: 100%;
+    --color-value: 255;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.pokemon-data-upper{
+    display: flex;
+}
+
+.icons{
+    align-self: center;
+    margin-left: auto;
+}
+
+.icon{
+    width: 30px;
+    aspect-ratio: 1;
+    margin: auto 0;
+}
+
+.pokemon-data-health-bar{
+    margin-top: 1vw;
+    height: 20px;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.pokemon-data-health-out{
+    margin-top: 0;
+    height: 75%;
+    width: 100%;
+}
+
+.pokemon-data-health{
+    margin-left: 1%;
 }
