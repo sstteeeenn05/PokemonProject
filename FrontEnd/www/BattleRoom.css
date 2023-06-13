@@ -86,7 +86,7 @@ body{
     font-size: 2vw;
 }
 
-.pokemon-name-section::after{
+.level{
     content: "lv 69";
     margin-left: 3vw;
 }
@@ -190,6 +190,7 @@ body{
     border-radius: 1vw;
     padding: .5vw 1vw;
     margin: .5vw;
+    cursor: pointer;
 }
 
 .skill-title{
@@ -207,19 +208,17 @@ body{
     flex-direction: column;
 }
 
+.skill-detail{
+    font-size: x-large;
+}
+
 .condition-list{
     display: flex;
     margin-bottom: 8%;
 }
 
-.skill-form{
-    font-size: x-large;
-}
-
-.skill-form::after{
-    content: "PP: 10/10";
+.skill-point{
     float: right;
-    margin-right: .25vw;
 }
 
 .potion-data{
@@ -235,6 +234,7 @@ body{
     border: mediumseagreen 3px solid;
     border-radius: 1vw;
     padding: 1vw;
+    cursor: pointer;
 }
 
 .pokemon-table:hover, .potion-table:hover, .fight-data:hover{
@@ -246,7 +246,6 @@ body{
 }
 
 .pokemon-data-img, .potion-data-img{
-    pointer-events: none;
     width: 95%;
     aspect-ratio: 1;
     margin: auto;
@@ -258,7 +257,6 @@ body{
     width: 100%;
     display: flex;
     flex-direction: column;
-    cursor: pointer;
 }
 
 .pokemon-data-upper{

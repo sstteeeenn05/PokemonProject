@@ -9,21 +9,22 @@
 <body x-data x-cloak>
 <div class="main">
 
-	<img class="enemy-pokemon-img" :src="'./assets/'+$store.modal.potionList[3][0]">
-	<img class="player-pokemon-img" :src="'./assets/'+$store.modal.potionList[2][0]">
+	<img class="enemy-pokemon-img" draggable="false" :src="'./assets/'+$store.modal.potionList[3][0]">
+	<img class="player-pokemon-img" draggable="false" :src="'./assets/'+$store.modal.potionList[2][0]">
 
 	<div class="enemy-info">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="enemy-pokemon-name" x-text="'nani'"></span>
 				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
 				</template>
+				<span class="level" x-text="'lv69'"></span>
 			</div>
 
 			<div class="icons">
 				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
 				</template>
 			</div>
 		</div>
@@ -41,13 +42,14 @@
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="player-pokemon-name" x-text="'nani'"></span>
 				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
 				</template>
+				<span class="level" x-text="'lv69'"></span>
 			</div>
 
 			<div class="icons">
 				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-					<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
 				</template>
 			</div>
 		</div>
@@ -79,7 +81,7 @@
 						<h2 x-text="'Water Gun'" style="margin: 0; display: inline-block"></h2>
 						<div>
 							<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-								<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.skillType[index]">
+								<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.skillType[index]">
 							</template>
 						</div>
 					</div>
@@ -87,10 +89,13 @@
 						<div class="condition-list">
 							<span style="font-size: x-large; margin-right: 2px">Cons:</span>
 							<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-								<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.skillCondition[index]">
+								<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.skillCondition[index]">
 							</template>
 						</div>
-						<span class="skill-form" x-text="'Psychical'"></span>
+						<div class="skill-detail">
+							<span class="skill-form" x-text="'Psychical'"></span>
+							<span class="skill-point" x-text="'PP: 10/10'"></span>
+						</div>
 					</div>
 				</div>
 			</template>
@@ -101,7 +106,7 @@
 				<table class="potion-table" @click="$store.modal.selectingPokemon()">
 					<tr>
 						<td class="Potion-data-img-container">
-							<img class="potion-data-img" :src="'./assets/' + item[0]">
+							<img class="potion-data-img" draggable="false" :src="'./assets/' + item[0]">
 						</td>
 						<td>
 							<div class="potion-data">
@@ -119,7 +124,7 @@
 				<table class="pokemon-table">
 					<tr>
 						<td class="pokemon-data-img-container">
-							<img class="pokemon-data-img">
+							<img class="pokemon-data-img" draggable="false">
 						</td>
 						<td>
 							<div class="pokemon-data">
@@ -127,12 +132,13 @@
 									<div class="pokemon-name-section">
 										<span class="pokemon-name" x-text="'nani'"></span>
 										<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-											<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+											<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
 										</template>
+										<span class="level" x-text="'lv69'"></span>
 									</div>
 									<div class="icons">
 										<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-											<img class="icon" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+											<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
 										</template>
 									</div>
 								</div>
