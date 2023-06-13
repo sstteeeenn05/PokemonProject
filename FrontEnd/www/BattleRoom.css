@@ -1,0 +1,41 @@
+[x-cloak] {
+    display: none !important;
+}
+
+body{
+    overflow: hidden;
+    font-family: fantasy;
+    background-color: #4e4e4e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main{
+    display: flex;
+    height: 90vh;
+    max-height: 46vw;
+    aspect-ratio: 1050 / 540;
+    background-image:url("assets/battleBackground.png");
+    background-size: cover;
+    background-position: top;
+}
+
+.move-menu{
+    display: flex;
+    padding: 20px;
+    box-sizing: border-box;
+    border: black 4px solid;
+    border-bottom: none;
+    background: wheat;
+    height: 30%;
+    width: 95%;
+    border-radius: 24px 24px 0 0;
+    margin: 0 auto;
+    justify-self: center;
+    align-self: end;
+}
+
+.context{
+    font-size: x-large;
+}
