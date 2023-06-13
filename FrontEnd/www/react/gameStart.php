@@ -6,7 +6,7 @@
         'stderr'=>$_SERVER['DOCUMENT_ROOT']."/../node/exe/stderr.txt"
     );
     proc_open(
-        "start ../../node/node.exe ../../node/game.js",
+        "start ".$_SERVER['DOCUMENT_ROOT']."/../node/node.exe ".$_SERVER['DOCUMENT_ROOT']."/../node/buffer.js",
         array(
             0=>['pipe','r'],
             1=>['pipe','w'],

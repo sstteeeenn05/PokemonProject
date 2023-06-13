@@ -23,7 +23,7 @@
 
     require_once "../phpapi/React.php";
     if(!isset($_POST['uploadName'])) React::reject("Lost argument");
-    $fileName=$_POST['uploadName'].".json";
+    $fileName=$_POST['uploadName'];
     $libArray=array();
     try{
         switch($_POST['uploadName']){
@@ -68,7 +68,8 @@
     }catch(Exception $e){
         React::reject($e->getMessage());
     }finally{
-        $file=fopen($_SERVER['DOCUMENT_ROOT']."\\lib\\".$fileName,'w');
+        move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\".$fileName.".txt");
+        $file=fopen($_SERVER['DOCUMENT_ROOT']."\\lib\\".$fileName.".json",'w');
         fwrite($file,json_encode($libArray));
         fclose($file);
         React::resolve("Upload Ok!");

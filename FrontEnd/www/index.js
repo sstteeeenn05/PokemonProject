@@ -43,17 +43,6 @@ document.addEventListener('alpine:init', ()=>{
         document.querySelector(statusQueryName).innerHTML=reject;
       })
     },
-    getPokemonPicByName(name){
-      return new Promise((resolve,reject)=>{
-        new XHR(
-          `https://bulbapedia.bulbagarden.net/wiki/${name}_(Pok%C3%A9mon)`
-        ).get('document').then((doc)=>{
-            resolve(doc.querySelector('.image').firstChild.src);
-        }).catch((err)=>{
-          reject(err);
-        })
-      })
-    },
     getAllPokemon(){
       db.getAllPokemon().then((resolve)=>{
         resolve.forEach((pokemon)=>{
