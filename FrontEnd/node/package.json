@@ -1,8 +1,0 @@
-{
-  "dependencies": {
-    "child_process": "^1.0.2",
-    "debug": "^4.3.4",
-    "fs": "^0.0.1-security",
-    "node-hide-console-window": "^2.1.1"
-  }
-}

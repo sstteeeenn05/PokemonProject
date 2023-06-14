@@ -1,10 +1,12 @@
 import {XHR} from "./XHR.js"
 
 export class Game{
-    start(param){
-        let data=new FormData();
-        data.append('param',param);
-        return new XHR('/react/gameStart.php').send(data);
+    start(){
+        return new Promise((resolve,reject)=>{
+            new XHR('/react/start.php').get('document').then((dom)=>{
+                resolve(Array.from(dom.querySelectorAll('p')).map((p)=>{return p.innerText}));
+            }).catch((err)=>{reject(err)})
+        })
     }
     send(command){
         let data=new FormData();

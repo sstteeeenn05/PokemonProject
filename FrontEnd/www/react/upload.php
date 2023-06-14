@@ -133,7 +133,7 @@
                 }
                 break;
             case "TestCase":
-                move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\TestCase.txt");
+                move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\exe\\file\\TestCase.txt");
                 React::resolve("Upload Ok!");
             default:
                 throw new Exception("Bad Header");
@@ -142,7 +142,7 @@
         React::reject($e->getMessage());
     }finally{
         fclose($file);
-        move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\".$fileName.".txt");
+        move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\exe\\file\\".$fileName.".txt");
         $file=fopen($libDir.$fileName.".json",'w');
         fwrite($file,json_encode($output, JSON_PRETTY_PRINT));
         fclose($file);

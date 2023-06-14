@@ -19,10 +19,10 @@ int main(int argc, char *argv[]) {
             throw FileOpenError(testFileName);
         }
         GameTest game(pokemonFileName, moveFileName, gameDataFileName, testFile);
-        // ofstream outputFile(path + "/TestOutput.txt");
-        game.serve(cout);
+        ofstream outputFile(path + "/TestOutput.txt");
+        game.serve(outputFile);
         testFile.close();
-        // outputFile.close();
+        outputFile.close();
     } else {
         GameAI game(pokemonFileName, moveFileName, gameDataFileName);
         ofstream outputFile(path + "/TestOutput.txt");

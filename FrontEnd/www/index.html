@@ -10,10 +10,8 @@
 <div class="main" x-data x-cloak>
 	<div class="input-box">
 		<span class="title">Pokémon Battle</span>
-		<button class="option-button" @click="$store.modal.open('normalModal')">Normal Mode</button>
 		<button class="option-button" @click="$store.modal.open('testModal')">Test Mode</button>
 		<button class="option-button" @click="$store.modal.open('manageModal')">Manage</button>
-		<button class="option-button" @click="$store.db.getAllPokemon()">Test</button>
 	</div>
 
 	<div class="stop-sending-me-anime-pictures" x-show="false">
@@ -32,15 +30,6 @@
 		<p>OH MY GOD.</p>
 	</div>
 </div>
-
-<dialog class="input-modal" x-data id="normalModal">
-	<p style="text-align: center; font-size: x-large">Use Current Library?</p>
-	<button class="modal-button manage" @click="$store.modal.close('normalModal'); $store.modal.open('manageModal');">manage</button>
-	<div class="modal-button-section">
-		<button class="modal-button cancel" @click="$store.modal.close('normalModal')">cancel</button>
-		<button class="modal-button confirm" @click="location.href = 'BattleRoom.html'">confirm</button>
-	</div>
-</dialog>
 
 <dialog class="modal" x-data id="testModal">
 	<span class="title">Test Mode</span>
@@ -62,7 +51,7 @@
 	</table>
 	<div class="modal-button-section">
 		<button class="modal-button cancel" @click="$store.modal.close('testModal')">cancel</button>
-		<button class="modal-button confirm">confirm</button>
+		<button class="modal-button confirm" @click="location.href='/battleroom.html'">confirm</button>
 	</div>
 </dialog>
 

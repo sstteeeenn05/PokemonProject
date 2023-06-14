@@ -21,33 +21,27 @@ document.addEventListener('alpine:init', () => {
     enemyId: 0,
     isDamaged: [false, false],
     isSwitchingClassName: ['', ''],
-    queue: [[]],
-    message: "You Enter A Battle!",
+    queue:[[]],
+    message:"You Enter A Battle!",
     bgm: new Audio('./assets/bgm.mp3'),
-
-    init() {
+    init(){
       setTimeout(() => {
         this.bgm.play()
         this.bgm.loop = true
       }, 2500)
-      game.start("Test").then((resolve) => {
-      }).catch((reject) => {
-        alert(reject);
-        location.href = "/";
-      })
-      game.initData().then((resolve) => {
-        this.constData = structuredClone(resolve);
-        this.dynamicData = resolve;
+      game.initData().then((resolve)=>{
+        this.constData=structuredClone(resolve);
+        this.dynamicData=resolve;
         this.parsePicture(this.constData.player);
         this.parsePicture(this.constData.enemy);
       })
-      setTimeout(() => {
-        console.log("getting output");
-        game.getOutput().then((resolve) => {
-          resolve.forEach((msg) => this.queue.push(msg.split('$')));
-          console.log(this.queue);
-        })
-      }, 1000);
+      game.start().then((resolve)=>{
+        resolve.forEach((msg)=>this.queue.push(msg.split('$')));
+        console.log(this.queue);
+      }).catch((reject)=>{
+        alert(reject);
+        location.href="/";
+      })
     },
     parsePicture(pokemons) {
       pokemons.forEach((pokemon) => {
