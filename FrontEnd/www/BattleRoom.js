@@ -21,6 +21,7 @@ document.addEventListener('alpine:init', () => {
     enemyId:0,
     queue:[],
     isDamaged: [false, false],
+    isChanging: [false, false],
     init(){
       game.start("Test").then((resolve)=>{
         console.log(resolve);
@@ -47,13 +48,19 @@ document.addEventListener('alpine:init', () => {
       })
     },
     attackSound: new Audio('./assets/attack.mp3'),
-    // 0-enemy 1-player
+    // 0-player 1-enemy
     damage(index) {
       this.attackSound.play();
       this.isDamaged[index] = true
       setTimeout(()=>{
         this.isDamaged[index] = false
       }, 100)
+    },
+    showChangePokemon(index) {
+      this.isChanging[index] = true
+      setTimeout(()=>{
+        this.isChanging[index] = false
+      }, 2000)
     }
   })
 
