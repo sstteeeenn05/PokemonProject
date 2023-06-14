@@ -1,6 +1,6 @@
 <?php
     require_once "../phpapi/React.php";
-    popen("start ".$_SERVER['DOCUMENT_ROOT']."\\exe\\Pokemon.exe",'r');
+    system("\"".$_SERVER['DOCUMENT_ROOT']."\\exe\\Pokemon.exe\"");
     usleep(100);
     $file=fopen($_SERVER['DOCUMENT_ROOT']."\\exe\\TestOutput.txt",'r');
     echo React::arrayToDom(explode(';',preg_replace(

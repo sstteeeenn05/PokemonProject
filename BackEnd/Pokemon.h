@@ -1,36 +1,50 @@
-//
-// Created by tomjojo on 2023/5/30.
-//
-
 #pragma once
 
-#include"Header.h"
+#include <iostream>
+#include <set>
+#include "Types.h"
 
-class Pokemon{
-public:
-    string name;
-    vector<Type> type;
-    int maxHp;
+class Pokemon {
+protected:
+    const std::string name;
+    const std::set<Type> typeList;
+    const int maxHp;
+    const int attack;
+    const int defense;
+    const int specialAttack;
+    const int specialDefense;
+    const int speed;
+    const int level;
+
     int hp;
-    int atk;
-    int def;
-    int spAtk;
-    int spDef;
-    int speed;
+    std::set<Status> statusList;
 
-    int level;
-    int exp;
+public:
+    Pokemon(std::string name, std::set<Type> &typeList,
+            int maxHp, int atk, int def, int spAtk, int spDef, int speed, int level = 50);
+    Pokemon(const Pokemon &pokemon) = default;
+    Pokemon(Pokemon &&pokemon) noexcept = default;
+    static Pokemon fromInput(std::istream &input, std::string name);
 
-    set<Status> statusList;
+    [[nodiscard]] const std::string &getName() const;
+    [[nodiscard]] const std::set<Type> &getTypeList() const;
+    [[nodiscard]] int getMaxHp() const;
+    [[nodiscard]] int getAttack() const;
+    [[nodiscard]] int getDefense() const;
+    [[nodiscard]] int getSpecialAttack() const;
+    [[nodiscard]] int getSpecialDefense() const;
+    [[nodiscard]] int getSpeed() const;
+    [[nodiscard]] int getLevel() const;
+    [[nodiscard]] int getHp() const;
+    [[nodiscard]] const std::set<Status> &getStatusList() const;
 
-    Pokemon() = default;
-    Pokemon(string _name, vector<Type> _type, int _hp, int _atk, int _def, int _spAtk, int _spDef, int _speed);
-    Pokemon(string _name, vector<Type> _type, int _hp, int _atk, int _def, int _spAtk, int _spDef, int _speed,int _level,int _exp);
-    void init(int, set<Status>);
+    [[nodiscard]] bool hasStatus(Status status) const;
+    [[nodiscard]] bool isFainting() const;
+    [[nodiscard]] bool isFaster(const Pokemon &pokemon) const;
+    [[nodiscard]] std::string getStatusString() const;
 
-    void heal(int offset);
-    void damage(int offset);
-    void addStatus(Status);
-    void removeStatus(Status);
-    bool hasStatus(Status);
+    void heal(int amount);
+    void damage(int amount);
+    void addStatus(Status status);
+    void performStatus();
 };

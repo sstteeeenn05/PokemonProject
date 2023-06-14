@@ -1,12 +1,33 @@
-#include <iostream>
-#include"GameManager.h"
+#include "GameTest.h"
+#include "GameAI.h"
+#include <fstream>
 
-int main() {
-    srand(time(NULL));
-    /*Pokemon hi("hi", {"ra"}, 100, 10, 10, 10, 10, 10, 10, 10);
-    Pokemon ra("ra", {"hi"}, 100, 10, 10, 10, 10, 8, 10, 10);
-    Game game(hi,ra);
-    game.attack("hi",{"ra"},"Special",10,100);*/
-    GameManager game;
-    game.run();
+using namespace std;
+
+int main(int argc, char *argv[]) {
+
+    string path(argv[0]);
+    path = path.substr(0, path.rfind('\\'));
+    const string pokemonFileName = path + "/file/PokemonLib.txt";
+    const string moveFileName = path + "/file/MoveLib.txt";
+    const string gameDataFileName = path + "/file/GameData.txt";
+    const string testFileName = path + "/file/TestCase.txt";
+
+    if (/*argc > 1 && string(argv[1]) == "Test"*/true) {
+        ifstream testFile(testFileName);
+        if (!testFile.is_open()) {
+            throw FileOpenError(testFileName);
+        }
+        GameTest game(pokemonFileName, moveFileName, gameDataFileName, testFile);
+        ofstream outputFile(path + "/TestOutput.txt");
+        game.serve(outputFile);
+        testFile.close();
+        outputFile.close();
+    } else {
+        GameAI game(pokemonFileName, moveFileName, gameDataFileName);
+        ofstream outputFile(path + "/TestOutput.txt");
+        game.serve(outputFile);
+        outputFile.close();
+    }
+    return 0;
 }

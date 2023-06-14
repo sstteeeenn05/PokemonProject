@@ -1,54 +1,126 @@
-//
-// Created by tomjojo on 2023/5/30.
-//
 #include "Pokemon.h"
 
-Pokemon::Pokemon(
-        string _name,
-        vector<Type> _type,
-        int _hp,
-        int _atk,
-        int _def,
-        int _spAtk,
-        int _spDef,
-        int _speed
-):name(std::move(_name)),type(std::move(_type)),maxHp(_hp), hp(_hp), atk(_atk), def(_def), spAtk(_spAtk), spDef(_spDef), speed(_speed), level(0), exp(0) {}
+#include <sstream>
 
 Pokemon::Pokemon(
-        string _name,
-        vector<Type> _type,
-        int _hp,
-        int _atk,
-        int _def,
-        int _spAtk,
-        int _spDef,
-        int _speed,
-        int _level,
-        int _exp
-    ):name(std::move(_name)),type(std::move(_type)),maxHp(_hp), hp(_hp), atk(_atk), def(_def), spAtk(_spAtk), spDef(_spDef), speed(_speed), level(_level), exp(_exp) {}
+        std::string name,
+        std::set<Type> &typeList,
+        const int maxHp,
+        const int atk,
+        const int def,
+        const int spAtk,
+        const int spDef,
+        const int speed,
+        const int level
+) : name(std::move(name)),
+    typeList(typeList),
+    maxHp(maxHp),
+    attack(atk),
+    defense(def),
+    specialAttack(spAtk),
+    specialDefense(spDef),
+    speed(speed),
+    hp(maxHp),
+    level(level) {}
 
-void Pokemon::init(int deltaHp, set<Status> _statusList) {
-    hp += deltaHp;
-    statusList = _statusList;
+Pokemon Pokemon::fromInput(std::istream &input, std::string name) {
+    size_t typeCount;
+    int maxHp, attack, defense, specialAttack, specialDefense, speed;
+
+    input >> typeCount;
+    std::set<Type> typeList;
+    for (size_t i = 0; i < typeCount; ++i) {
+        std::string typeName;
+        input >> typeName;
+        typeList.insert(TypeMap.at(typeName));
+    }
+
+    input >> maxHp >> attack >> defense >> specialAttack >> specialDefense >> speed;
+    return {std::move(name), typeList, maxHp, attack, defense, specialAttack, specialDefense, speed};
 }
 
-
-void Pokemon::heal(int offset) {
-    hp += offset;
+const std::string &Pokemon::getName() const {
+    return name;
 }
 
-void Pokemon::damage(int offset) {
-    hp -= offset;
+const std::set<Type> &Pokemon::getTypeList() const {
+    return typeList;
 }
 
-void Pokemon::addStatus(Status status){
-    statusList.insert(status);
+int Pokemon::getMaxHp() const {
+    return maxHp;
 }
 
-void Pokemon::removeStatus(Status status){
-    statusList.erase(status);
+int Pokemon::getAttack() const {
+    return attack;
 }
 
-bool Pokemon::hasStatus(Status status){
-    return find(statusList.cbegin(), statusList.cend(), status) != statusList.cend();
+int Pokemon::getDefense() const {
+    return defense;
+}
+
+int Pokemon::getSpecialAttack() const {
+    return specialAttack;
+}
+
+int Pokemon::getSpecialDefense() const {
+    return specialDefense;
+}
+
+int Pokemon::getSpeed() const {
+    return hasStatus(Status::PARALYSIS) ? (speed >> 1) : speed;
+}
+
+int Pokemon::getLevel() const {
+    return level;
+}
+
+int Pokemon::getHp() const {
+    return hp;
+}
+
+const std::set<Status> &Pokemon::getStatusList() const {
+    return statusList;
+}
+
+bool Pokemon::isFainting() const {
+    return hp <= 0;
+}
+
+bool Pokemon::isFaster(const Pokemon &pokemon) const {
+    return speed >= pokemon.speed;
+}
+
+std::string Pokemon::getStatusString() const {
+    std::stringstream stream;
+    for (const Status status : statusList) {
+        stream << ' ' << StatusName[static_cast<size_t>(status)];
+    }
+    return stream.str();
+}
+
+void Pokemon::heal(const int amount) {
+    hp = std::min(hp + amount, maxHp);
+}
+
+void Pokemon::damage(const int amount) {
+    hp = std::max(0, hp - amount);
+}
+
+void Pokemon::addStatus(const Status status) {
+    if (status != Status::NONE) {
+        statusList.insert(status);
+    }
+}
+
+bool Pokemon::hasStatus(const Status status) const {
+    return statusList.find(status) != statusList.cend();
+}
+
+void Pokemon::performStatus() {
+    for (const Status status : statusList) {
+        if (status == Status::BURN || status == Status::POISON) {
+            damage(maxHp >> 4);
+        }
+    }
 }
