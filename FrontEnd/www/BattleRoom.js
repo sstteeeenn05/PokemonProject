@@ -5,6 +5,7 @@ import {Game} from "./jsapi/Game.js"
 let db = new Database();
 let game=new Game();
 
+
 window.addEventListener('beforeunload', (e) => {
   e.preventDefault();
   game.exit();
@@ -39,15 +40,16 @@ document.addEventListener('alpine:init', () => {
           console.log(this.queue);
         })
       },1000);
-      
     },
     parsePicture(pokemons){
       pokemons.forEach((pokemon)=>{
         pokemon.src=game.getPokemonPicByName(pokemon.name);
       })
     },
+    attackSound: new Audio('./assets/attack.mp3'),
     // 0-enemy 1-player
     damage(index) {
+      this.attackSound.play();
       this.isDamaged[index] = true
       setTimeout(()=>{
         this.isDamaged[index] = false
@@ -58,14 +60,18 @@ document.addEventListener('alpine:init', () => {
   Alpine.store('loading',{
     isLoading: true,
     canMainShow: false,
+    bgm: new Audio('./assets/bgm.mp3'),
+    buttonSound: new Audio('./assets/buttonSound.mp3'),
     init() {
       setTimeout(()=>{
         this.isLoading = false
+        this.bgm.play()
+        this.bgm.loop = true
       }, 2500)
       setTimeout(()=>{
         this.canMainShow = true
       }, 1000)
-    }
+    },
   })
 
   Alpine.store('modal', {
