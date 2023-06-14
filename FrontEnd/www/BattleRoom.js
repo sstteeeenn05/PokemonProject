@@ -87,17 +87,19 @@ document.addEventListener('alpine:init', () => {
         this.playerId=this.constData.player.indexOf(this.constData.player.find((pokemon)=>pokemon.name==name));
         this.switchPokemonIn(0);
       }
-      let i=0;
+      let i=0;//i=0~2:player i=4~5:enemy
       this.queue[0].forEach((data)=>{
         let list=data.split(' ');
         let name=list[0];
         let hp=list[1];
         if(i<3) this.damagePlayerPokemon(name,hp);
         else this.damageEnemyPokemon(name,hp);
-        for(let i=0;i<4;i++){
-          let moveName=list[i*2];
-          let movePP=list[i*2+1];
-
+        for(let j=2;j<6;j++){
+          let moveName=list[j*2];
+          let movePP=list[j*2+1];
+        }
+        for(let j=12;j<list.length;j++){
+          let con=list[j];
         }
         i++;
       })
