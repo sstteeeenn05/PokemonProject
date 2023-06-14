@@ -1,6 +1,13 @@
 #include "GameTest.h"
 #include <queue>
 
+GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFileName,
+                   const std::string &gameDataFileName, std::istream &input) :
+        GameBase(pokemonFileName, moveFileName, gameDataFileName), input(input) {
+
+    for (string line; getline(input, line) && line != "Test";) {}
+}
+
 void GameTest::serve() {
     turn = 0;
     queue<string> outputs;
@@ -21,9 +28,13 @@ void GameTest::serve() {
                 break;
             }
         } else if (command == "Bag") {
-
+            if (bag()) {
+                break;
+            }
         } else if (command == "Pokemon") {
-
+            if (swap()) {
+                break;
+            }
         } else {
             throw InvalidCommandError("unknown command " + command);
         }
@@ -134,10 +145,10 @@ bool GameTest::performStatus() {
 
     playerPokemon.performStatus();
     opponentPokemon.performStatus();
-    for (const Status status : playerPokemon.getStatusList()) {
+    for (const Status status: playerPokemon.getStatusList()) {
         outputPerformStatus(playerPokemon.getName(), status, false);
     }
-    for (const Status status : opponentPokemon.getStatusList()) {
+    for (const Status status: opponentPokemon.getStatusList()) {
         outputPerformStatus(opponentPokemon.getName(), status, true);
     }
     return checkWin(false) || checkWin(true);
@@ -158,7 +169,7 @@ bool GameTest::checkWin(const bool isOpponent) {
     } else {
         if (playerPokemonIt->second.isFainting()) {
             outputFainted(playerPokemonIt->second.getName(), false);
-            for (const auto &pair : playerPokemonMap) {
+            for (const auto &pair: playerPokemonMap) {
                 if (!pair.second.isFainting()) {
                     return false;
                 }

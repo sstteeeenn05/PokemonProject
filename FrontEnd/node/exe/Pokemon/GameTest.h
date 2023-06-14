@@ -9,8 +9,8 @@ private:
     istream &input;
 
 public:
-    GameTest(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName, istream &input) :
-            GameBase(pokemonFileName, moveFileName, gameDataFileName), input(input) {};
+    GameTest(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName,
+             istream &input);
 
     void serve() override;
 
