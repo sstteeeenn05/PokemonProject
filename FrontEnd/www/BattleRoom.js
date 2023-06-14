@@ -38,6 +38,20 @@ document.addEventListener('alpine:init', () => {
       })
     }
   })
+
+  Alpine.store('loading',{
+    isLoading: true,
+    canMainShow: false,
+    init() {
+      setTimeout(()=>{
+        this.isLoading = false
+      }, 2500)
+      setTimeout(()=>{
+        this.canMainShow = true
+      }, 1000)
+    }
+  })
+
   Alpine.store('modal', {
     type: '',
     listData: [1, 2, 3, 4],

@@ -7,7 +7,18 @@
 	<script defer src="BattleRoom.js" type="module"></script>
 </head>
 <body x-data x-cloak>
-<div class="main">
+<div class="upper-div" x-show="$store.loading.isLoading">
+	<div class="upper"></div>
+	<div class="middle-upper"></div>
+</div>
+<div class="lower-div" x-show="$store.loading.isLoading">
+	<div class="middle-lower"></div>
+	<div class="lower"></div>
+</div>
+
+
+
+<div class="main" x-show="$store.loading.canMainShow">
 
 	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
 	<img class="player-pokemon-img" draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
@@ -90,13 +101,13 @@
 						</div>
 					</div>
 					<div class="skill-description">
-						<div class="skill-detail">
-							<span class="skill-form" x-text="move.type=='Potion'?'Potion':move.isPhysical?'Physical':'Special'"></span>
-							<span class="skill-point" x-text="'PP: '+$store.game.dynamicData.player[0].moves[index].pp+'/'+move.pp"></span>
-						</div>
 						<div class="condition-list" x-show="move.con">
 							<span style="font-size: x-large; margin-right: 2px">Con:</span>
 							<img class="icon" draggable="false" :src="'./assets/' + move.con + '.svg'">
+						</div>
+						<div class="skill-detail">
+							<span class="skill-form" x-text="move.type=='Potion'?'Potion':move.isPhysical?'Physical':'Special'"></span>
+							<span class="skill-point" x-text="'PP: '+$store.game.dynamicData.player[0].moves[index].pp+'/'+move.pp"></span>
 						</div>
 					</div>
 				</div>
