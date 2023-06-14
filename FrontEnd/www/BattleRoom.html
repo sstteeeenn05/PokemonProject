@@ -9,22 +9,22 @@
 <body x-data x-cloak>
 <div class="main">
 
-	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.opponentPokemons[0].src">
-	<img class="player-pokemon-img" draggable="false" :src="$store.game.myPokemons[0].src">
+	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
+	<img class="player-pokemon-img" draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
 
 	<div class="enemy-info">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
-				<span class="pokemon-name" id="enemy-pokemon-name" x-text="'nani'"></span>
-				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+				<span class="pokemon-name" id="enemy-pokemon-name" x-text="$store.game.constData.enemy[$store.game.enemyId].name"></span>
+				<template x-for="(icon, index) in $store.game.constData.enemy[$store.game.enemyId].types" :key="index">
+					<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'">
 				</template>
-				<span class="level" x-text="'lv69'"></span>
+				<span class="level" x-text="'lv'+$store.game.dynamicData.enemy[$store.game.enemyId].level"></span>
 			</div>
 
 			<div class="icons">
-				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+				<template x-for="(icon, index) in $store.game.dynamicData.enemy[$store.game.enemyId].cons" :key="index">
+					<img class="icon" draggable="false" :src="'./assets/' + icon + '.svg'">
 				</template>
 			</div>
 		</div>
@@ -33,23 +33,23 @@
 			<div class="pokemon-health-out">
 				<div class="pokemon-health-in"></div>
 			</div>
-			<span class="health" x-text="'500/1000'"></span>
+			<span class="health" x-text="$store.game.dynamicData.enemy[$store.game.enemyId].hp+'/'+$store.game.constData.enemy[$store.game.enemyId].hp"></span>
 		</div>
 	</div>
 
 	<div class="player-info">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
-				<span class="pokemon-name" id="player-pokemon-name" x-text="'nani'"></span>
-				<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+				<span class="pokemon-name" id="player-pokemon-name" x-text="$store.game.constData.player[$store.game.playerId].name"></span>
+				<template x-for="(icon, index) in $store.game.constData.player[$store.game.playerId].types" :key="index">
+					<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'">
 				</template>
-				<span class="level" x-text="'lv69'"></span>
+				<span class="level" x-text="'lv'+$store.game.dynamicData.player[$store.game.playerId].level"></span>
 			</div>
 
 			<div class="icons">
-				<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-					<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+				<template x-for="(icon, index) in $store.game.dynamicData.player[$store.game.playerId].cons" :key="index">
+					<img class="icon" draggable="false" :src="'./assets/' + icon '.svg'">
 				</template>
 			</div>
 		</div>
@@ -57,7 +57,7 @@
 			<div class="pokemon-health-out">
 				<div class="pokemon-health-in"></div>
 			</div>
-			<span class="health" x-text="'1000/1000'"></span>
+			<span class="health" x-text="$store.game.dynamicData.player[$store.game.playerId].hp+'/'+$store.game.constData.player[$store.game.playerId].hp"></span>
 		</div>
 	</div>
 	<div class="move-menu">
@@ -75,7 +75,7 @@
 	<div class="data-list">
 
 		<div class="fight-selection-section" x-show="$store.modal.type === 'fight'">
-			<template x-for="move in $store.game.myPokemons[0].moves" :key="index">
+			<template x-for="(move,index) in $store.game.constData.player[0].moves" :key="index">
 				<div class="fight-data">
 					<div class="skill-title">
 						<h2 x-text="move.name" style="margin: 0; display: inline-block"></h2>
@@ -90,7 +90,7 @@
 						</div>
 						<div class="skill-detail">
 							<span class="skill-form" x-text="move.type=='Potion'?'Potion':move.isPhysical?'Physical':'Special'"></span>
-							<span class="skill-point" x-text="'PP: '+move.pp+'/10'"></span>
+							<span class="skill-point" x-text="'PP: '+$store.game.dynamicData.player[0].moves[index].pp+'/'+move.pp"></span>
 						</div>
 					</div>
 				</div>
@@ -116,7 +116,7 @@
 		</div>
 
 		<div x-show="$store.modal.type === 'pokemon'">
-			<template x-for="pokemon in $store.game.myPokemons" :key="index">
+			<template x-for="(pokemon,index) in $store.game.dynamicData.player" :key="index">
 				<table class="pokemon-table">
 					<tr>
 						<td class="pokemon-data-img-container">
@@ -142,7 +142,7 @@
 									<div class="pokemon-health-out pokemon-data-health-out">
 										<div class="pokemon-health-in"></div>
 									</div>
-									<span class="health pokemon-data-health" x-text="pokemon.hp+'/1000'"></span>
+									<span class="health pokemon-data-health" x-text="pokemon.hp+'/'+$store.game.constData.player[index].hp"></span>
 								</div>
 							</div>
 						</td>

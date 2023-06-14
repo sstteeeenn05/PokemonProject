@@ -23,8 +23,8 @@
     }
 
     class GameData{
-        public $myPokemons=array();
-        public $opponentPokemons=array();
+        public $player=array();
+        public $enemy=array();
     }
 
     function findByName($arr,$name){
@@ -110,7 +110,7 @@
                             fgets($file)
                         ))
                     );
-                    $output->myPokemons[]=$pokemon;
+                    $output->player[]=$pokemon;
                 }
                 fscanf($file,"%d",$opponentCount);
                 for($i=0;$i<$opponentCount;$i++){
@@ -126,7 +126,7 @@
                             fgets($file)
                         ))
                     );
-                    $output->opponentPokemons[]=$pokemon;
+                    $output->enemy[]=$pokemon;
                 }
                 break;
             default:
