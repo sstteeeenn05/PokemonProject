@@ -129,6 +129,9 @@
                     $output->enemy[]=$pokemon;
                 }
                 break;
+            case "TestCase":
+                move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\TestCase.txt");
+                React::resolve("Upload Ok!");
             default:
                 throw new Exception("Bad Header");
         }

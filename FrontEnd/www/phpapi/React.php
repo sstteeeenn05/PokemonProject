@@ -7,7 +7,7 @@
             exit("<span id='content' status='reject'>".$message."</span>");
         }
         public static function arrayToDom($arr):string{
-            return "<item>".implode('</item><item>',$arr)."</item>";
+            return "<p>".implode('</p><p>',$arr)."</p>";
         }
     }
 ?>

@@ -1,5 +1,6 @@
 #include "GameTest.h"
 #include <sstream>
+#include <fstream>
 
 GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFileName,
                    const std::string &gameDataFileName, std::istream &input) :
@@ -40,7 +41,9 @@ void GameTest::serve() {
         }
     }
     flushOutputs(stream);
-    cout << stream.str() << endl;
+    std::ofstream file("TestOutput.txt");
+    file << stream.str() << endl;
+    file.close();
 }
 
 bool GameTest::battle() {

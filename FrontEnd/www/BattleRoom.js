@@ -18,8 +18,9 @@ document.addEventListener('alpine:init', () => {
     opponentPokemons:[],
     playerId:0,
     enemyId:0,
+    queue:[],
     init(){
-      game.start().then((resolve)=>{
+      game.start("Test").then((resolve)=>{
         console.log(resolve);
       }).catch((reject)=>{
         alert(reject);
@@ -31,6 +32,13 @@ document.addEventListener('alpine:init', () => {
         this.parsePicture(this.constData.player);
         this.parsePicture(this.constData.enemy);
       })
+      setTimeout(()=>{
+        game.getOutput((resolve)=>{
+          this.queue=resolve;
+          console.log(this.queue);
+        })
+      },1000);
+      
     },
     parsePicture(pokemons){
       pokemons.forEach((pokemon)=>{

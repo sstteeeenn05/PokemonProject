@@ -1,15 +1,17 @@
 import {XHR} from "./XHR.js"
 
 export class Game{
-    start(){
-        return new XHR('/react/gameStart.php').send(null);
+    start(param){
+        let data=new FormData();
+        data.append('param',param);
+        return new XHR('/react/gameStart.php').send(data);
     }
     send(command){
         let data=new FormData();
         data.append('command',command); 
         return new Promise((resolve,reject)=>{
             new XHR('/react/gameExe.php').send(data).then((dom)=>{
-                resolve(dom.querySelectorAll('item'));
+                resolve(dom.querySelectorAll('p'));
             }).catch((err)=>{reject(err)})
         })
     }
@@ -25,8 +27,12 @@ export class Game{
     opponentMove(name){
         return this.send(name);
     }
-    get(){
-        return this.send();
+    getOutput(){
+        return new Promise((resolve,reject)=>{
+            new XHR('/react/gameGetOutput.php').get('document').then((dom)=>{
+                resolve(Array.from(dom.querySelectorAll('p')).map((p)=>{return p.innerText}));
+            }).catch((err)=>{reject(err)})
+        })
     }
     exit(){
         return this.send("kill");

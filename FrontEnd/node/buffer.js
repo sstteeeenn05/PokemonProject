@@ -1,8 +1,7 @@
 const pipe=require('child_process');
 const fs=require('fs');
-import {showConsole, hideConsole} from "node-hide-console-window";
 
-let game=pipe.execFile(`${__dirname}/exe/test.exe`);
+let game=pipe.execFile(`${__dirname}/exe/Pokemon.exe`);
 
 let canOutput=false;
 
@@ -17,7 +16,6 @@ game.stdout.on('data',(data)=>{
 
 console.log(`game loaded!`);
 fs.writeFile(`${__dirname}/exe/stdin.txt`,"",()=>{});
-hideConsole();
 
 let interval=setInterval(()=>{
     fs.readFile(`${__dirname}/exe/stdin.txt`,'utf-8',(err,data)=>{
@@ -31,7 +29,6 @@ let interval=setInterval(()=>{
                 game.stdin.write("\x03");
                 clearInterval(interval);
                 fs.writeFile(`${__dirname}/exe/stdout.txt`,"exit",()=>{});
-                showConsole();
                 process.exit();
             }
             game.stdin.write(command);

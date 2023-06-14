@@ -15,7 +15,7 @@ export class XHR{
                     if(status=="resolve") resolve(react);
                     if(status=="reject") reject(react);
                 }catch(e){
-                    reject("伺服器錯誤");
+                    reject(e);
                 }
             }
             this.xhr.onabort=()=>reject("上傳已取消");

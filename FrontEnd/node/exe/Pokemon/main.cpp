@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
     const string gameDataFileName = "file/GameData.txt";
     const string testFileName = "file/TestCase.txt";
 
-    if (argc > 1 && string(argv[1]) == "Test") {
+    if (/*argc > 1 && string(argv[1]) == "Test"*/true) {
         ifstream testFile(testFileName);
         if (!testFile.is_open()) {
             throw FileOpenError(testFileName);

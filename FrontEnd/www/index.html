@@ -46,11 +46,16 @@
 		<tr>
 			<td><label for="gameDataUploadElement">Game Data:</label></td>
 			<td><input id="gameDataUploadElement" class="modal-file-input" type="file"/></td>
-			<td><input class="modal-button confirm"  type="button" @click="$store.db.upload('GameData','#gameDataUploadElement','#gameDataStatus')" value="Upload"/></td>
+			<td><input class="modal-button confirm"  type="button" @click="$store.db.upload('GameData','#gameDataUploadElement','#testModeStatus')" value="Upload"/></td>
+		</tr>
+		<tr>
+			<td><label for="testCaseUploadElement">Test Case:</label></td>
+			<td><input id="testCaseUploadElement" class="modal-file-input" type="file"/></td>
+			<td><input class="modal-button confirm"  type="button" @click="$store.db.upload('TestCase','#testCaseUploadElement','#testModeStatus')" value="Upload"/></td>
 		</tr>
 		<tr>
 			<td><span>Update Message:</span></td>
-			<td colspan="2"><span id="gameDataStatus"></span></td>
+			<td colspan="2"><span id="testModeStatus"></span></td>
 		</tr>
 	</table>
 	<div class="modal-button-section">
