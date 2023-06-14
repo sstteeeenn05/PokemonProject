@@ -56,7 +56,7 @@ Move &GameAI::getBestAction(const BattlePokemon &defender, BattlePokemon &attack
             bestMoveIt = it;
         }
     }
-    return temp;
+    return attacker.getMove(bestMoveIt->first);
 }
 
 double GameAI::getBestActionValue(const BattlePokemon &defender, const BattlePokemon &attacker) {
@@ -123,12 +123,23 @@ void GameAI::computerMove() {
     move(pokemon2,pokemon1,mineMaxAct, isOpponent);
 }
 
-int GameAI::getDamage(Move& move,Pokemon& attacker, Pokemon& defender) {
+int GameAI::getDamage(const Move &move, const Pokemon &attacker, const Pokemon &defender) {
     const int baseDamage = move.calcBaseDamage(attacker, defender);
-    const double stab = move.calcSTAB(defender.getTypeList());
+    const double stab = move.calcSTAB(attacker.getTypeList());
     const double typeEffect = move.calcTypeEffect(defender.getTypeList());
-    const int damage = static_cast<int>(baseDamage * stab * typeEffect);
-    return damage;
+    return static_cast<int>(baseDamage * stab * typeEffect);
+}
+
+double GameAI::getExpectDamage(const Move& move, const Pokemon &attacker, const Pokemon &defender) {
+    const int baseDamage = move.calcBaseDamage(attacker, defender);
+    const double stab = move.calcSTAB(attacker.getTypeList());
+    const double typeEffect = move.calcTypeEffect(defender.getTypeList());
+    double damage = baseDamage * stab * typeEffect;
+
+    if (attacker.hasStatus(Status::PARALYSIS)) {
+        damage *= 0.75;
+    }
+    return damage * move.getAccuracy() / 100.0;
 }
 
 bool GameAI::battle() {
