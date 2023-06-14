@@ -15,7 +15,7 @@ void GameAI::serve() {
             BattlePokemon &pokemon2 = *opponentPokemonIt;
             Move &move1 = pokemon1.getMove(moveName1);
 
-            int damage1 = move1.calcDamage(pokemon1, pokemon2);
+            //int damage1 = move1.calcDamage(pokemon1, pokemon2);
             calc();
         }
     }
@@ -34,7 +34,7 @@ Move& GameAI::atk( BattlePokemon& token, BattlePokemon& enemy){
         int damage = getDamage(move.second,pokemon1,pokemon2);
         if(pokemon2.hasStatus(Status::PARALYSIS)) damage *= 0.75;
         if(damage>maxDamage){
-            temp = move.second;
+           // temp = move.second;
         }
     }
     return temp;
@@ -67,25 +67,25 @@ void GameAI::calc(){
     int maxDamage;
     bool needSwap = 0;
     Pokemon temp = pokemon2 ;
-    Move t ;
+    //Move t ;
     for(auto& pokemon:opponentPokemonList){
         Move& t = atk(pokemon1,pokemon);
         int cal = getDamage(t,pokemon,pokemon1);
 
         if(maxDamage<cal){
             maxDamage = cal;
-            mineMaxAct = t;
-            temp = pokemon;
+            //mineMaxAct = t;
+            //temp = pokemon;
         }
     }
 
-    if(temp!= pokemon2){
-        opponentSwapPokemon(temp);
-    }
-    else {
+    //if(temp!= pokemon2){
+      //  opponentSwapPokemon(temp);
+    //}
+    //else {
 
         //TODO: do move
-    }
+   // }
     //if (pokemon2.getHp() /  > pokemon1.getHp() / mineMaxAct.calcDamage(pokemon2,pokemon1))return;
 
 }
