@@ -8,7 +8,7 @@ GameAI::GameAI(const std::string &pokemonFileName, const std::string &moveFileNa
                const std::string &gameDataFileName, std::istream &input) :
         GameBase(pokemonFileName, moveFileName, gameDataFileName), input(input) {}
 
-void GameAI::serve() {
+void GameAI::serve(std::ostream &outputFile) {
     stringstream stream;
     for (string command; getline(input, command); flushOutputs(stream)) {
         if (command == "Status") {
@@ -43,6 +43,54 @@ void GameAI::serve() {
     cout << stream.str() << endl;
 }
 
+void GameAI::computerMove() {
+    BattlePokemon &pokemon1 = playerPokemonIt->second;
+    BattlePokemon &pokemon2 = *opponentPokemonIt;
+    bool isOpponent = true;
+
+
+    if (pokemon2.getHp() < 0) {
+        computerSwap(pokemon1);
+        return;
+    }
+
+    // heal
+    Move &opponentMaxAct = getBestAction(pokemon2, pokemon1);
+    int maxOpponentDamage = getDamage(opponentMaxAct, pokemon1, pokemon2);
+
+    if (maxOpponentDamage > pokemon2.getHp()) {
+        if (maxOpponentDamage > pokemon2.getMaxHp()) {
+            computerSwap(pokemon1);
+            return;
+        }
+        // use potion
+        opponentUsePotion("HyperPotion",pokemon2.getName());
+        return;
+    }
+
+    // can kill
+    Move& mineMaxAct = getBestAction(pokemon1, pokemon2);
+
+    move(pokemon2,pokemon1,mineMaxAct, isOpponent);
+}
+
+void GameAI::computerSwap(BattlePokemon &enemy) {
+    string maxPokemonName;
+    double maxPokemonDamage = 0;
+    bool isOpponent = true;
+
+    for (const BattlePokemon &pokemon: opponentPokemonList) {
+        double temp = getBestActionValue(pokemon, enemy);
+        if (maxPokemonDamage < temp) {
+            maxPokemonDamage = temp;
+            maxPokemonName = pokemon.getName();
+        }
+    }
+
+    opponentSwapPokemon(maxPokemonName);
+    outputGo(maxPokemonName, isOpponent);
+}
+
 Move &GameAI::getBestAction(const BattlePokemon &defender, BattlePokemon &attacker) {
     map<string, Move>::const_iterator bestMoveIt;
     double maxDamage = 0;
@@ -70,57 +118,6 @@ double GameAI::getBestActionValue(const BattlePokemon &defender, const BattlePok
         }
     }
     return maxDamage;
-}
-
-void GameAI::computerMove() {
-    BattlePokemon &pokemon1 = playerPokemonIt->second;
-    BattlePokemon &pokemon2 = *opponentPokemonIt;
-
-    // change pokemon
-
-    if (pokemon2.getHp() < 0) {
-        computerSwap(pokemon2,pokemon1);
-        return;
-    }
-
-    // heal
-    Move &opponentMaxAct = getBestAction(pokemon2, pokemon1);
-    int maxOpponentDamage = getDamage(opponentMaxAct, pokemon1, pokemon2);
-
-    if (maxOpponentDamage > pokemon2.getHp()) {
-        if (maxOpponentDamage > pokemon2.getMaxHp()) {
-            computerSwap(pokemon2,pokemon1);
-            return;
-        }
-        // use potion
-        opponentUsePotion("HyperPotion",pokemon2.getName());
-        return;
-    }
-
-    // can kill
-    Move& mineMaxAct = getBestAction(pokemon1, pokemon2);
-
-    const int damage = getDamage(mineMaxAct,pokemon2,pokemon1);
-
-    mineMaxAct.use();
-    bool isOpponent = true;
-    outputMove(pokemon2.getName(), mineMaxAct.getName(), isOpponent);
-    if (pokemon2.hasStatus(Status::PARALYSIS)) {
-        outputParalyzed(pokemon2.getName(), isOpponent);
-        return;
-    }
-
-    const int baseDamage = mineMaxAct.calcBaseDamage(pokemon2, pokemon1);
-    const double stab = mineMaxAct.calcSTAB(pokemon1.getTypeList());
-    const double typeEffect = mineMaxAct.calcTypeEffect(pokemon1.getTypeList());
-    outputTypeEffect(typeEffect);
-
-    if (mineMaxAct.getAdditionalEffect() != Status::NONE) {
-        pokemon1.addStatus(mineMaxAct.getAdditionalEffect());
-        outputAdditionalEffect(pokemon2.getName(), mineMaxAct.getAdditionalEffect(), isOpponent);
-    }
-
-    move(pokemon2,pokemon1,mineMaxAct, isOpponent);
 }
 
 int GameAI::getDamage(const Move &move, const Pokemon &attacker, const Pokemon &defender) {
@@ -205,29 +202,6 @@ bool GameAI::swap() {
     return performStatus();*/
 }
 
-bool GameAI::move(const Pokemon &attacker, Pokemon &defender, Move &move, const bool isOpponent) {
-    move.use();
-    outputMove(attacker.getName(), move.getName(), isOpponent);
-    if (attacker.hasStatus(Status::PARALYSIS)) {
-        outputParalyzed(attacker.getName(), isOpponent);
-        return false;
-    }
-
-    const int baseDamage = move.calcBaseDamage(attacker, defender);
-    const double stab = move.calcSTAB(defender.getTypeList());
-    const double typeEffect = move.calcTypeEffect(defender.getTypeList());
-    outputTypeEffect(typeEffect);
-
-    if (move.getAdditionalEffect() != Status::NONE) {
-        defender.addStatus(move.getAdditionalEffect());
-        outputAdditionalEffect(defender.getName(), move.getAdditionalEffect(), isOpponent);
-    }
-
-    const int damage = static_cast<int>(baseDamage * stab * typeEffect);
-    defender.damage(damage);
-    return checkWin(isOpponent);
-}
-
 bool GameAI::performStatus() {
     BattlePokemon &playerPokemon = playerPokemonIt->second;
     BattlePokemon &opponentPokemon = * opponentPokemonIt;
@@ -270,19 +244,25 @@ bool GameAI::checkWin(const bool isOpponent) {
     }
 }
 
-void GameAI::computerSwap(BattlePokemon &player, BattlePokemon &enemy) {
-    string maxPokemonName;
-    double maxPokemonDamage = 0;
-    bool isOpponent = true;
-
-    for (const BattlePokemon &pokemon: opponentPokemonList) {
-        double temp = getBestActionValue(pokemon, enemy);
-        if (maxPokemonDamage < temp){
-            maxPokemonDamage = temp;
-            maxPokemonName = pokemon.getName();
-        }
+bool GameAI::move(const Pokemon &attacker, Pokemon &defender, Move &move, const bool isOpponent) {
+    move.use();
+    outputMove(attacker.getName(), move.getName(), isOpponent);
+    if (attacker.hasStatus(Status::PARALYSIS)) {
+        outputParalyzed(attacker.getName(), isOpponent);
+        return false;
     }
 
-    opponentSwapPokemon(maxPokemonName);
-    outputGo(maxPokemonName, isOpponent);
+    const int baseDamage = move.calcBaseDamage(attacker, defender);
+    const double stab = move.calcSTAB(defender.getTypeList());
+    const double typeEffect = move.calcTypeEffect(defender.getTypeList());
+    outputTypeEffect(typeEffect);
+
+    if (move.getAdditionalEffect() != Status::NONE) {
+        defender.addStatus(move.getAdditionalEffect());
+        outputAdditionalEffect(defender.getName(), move.getAdditionalEffect(), isOpponent);
+    }
+
+    const int damage = static_cast<int>(baseDamage * stab * typeEffect);
+    defender.damage(damage);
+    return checkWin(isOpponent);
 }

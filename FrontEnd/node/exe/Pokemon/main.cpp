@@ -1,4 +1,5 @@
 #include "GameTest.h"
+#include "GameAI.h"
 #include <fstream>
 
 using namespace std;
@@ -12,7 +13,7 @@ int main(int argc, char *argv[]) {
     const string gameDataFileName = path + "/file/GameData.txt";
     const string testFileName = path + "/file/TestCase.txt";
 
-    if (/*argc > 1 && string(argv[1]) == "Test"*/true) {
+    if (/*argc > 1 && string(argv[1]) == "Test"*/false) {
         ifstream testFile(testFileName);
         if (!testFile.is_open()) {
             throw FileOpenError(testFileName);
@@ -24,8 +25,9 @@ int main(int argc, char *argv[]) {
         outputFile.close();
     }
     else {
-        // GameAI game(pokemonFileName, moveFileName, gameDataFileName);
-        // game.serve();
+        GameAI game(pokemonFileName, moveFileName, gameDataFileName);
+        ofstream outputFile(path + "/TestOutput.txt");
+        game.serve(outputFile);
     }
     cin.ignore(1000);
     return 0;

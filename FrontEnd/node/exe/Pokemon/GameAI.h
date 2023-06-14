@@ -10,13 +10,22 @@ private:
 
 public:
     GameAI(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName,
-             istream &input);
+             istream &input = cin);
 
     void serve(std::ostream&) override;
+    void computerMove();
+    void computerSwap(BattlePokemon &enemy);
 
-    void battle();
-    static int getDamage(Move& move,Pokemon& attacker, Pokemon& defender);
+    static Move &getBestAction(const BattlePokemon &defender, BattlePokemon &attacker);
+    static double getBestActionValue(const BattlePokemon &defender, const BattlePokemon &attacker);
+    static int getDamage(const Move &move, const Pokemon &attacker, const Pokemon &defender);
+    static double getExpectDamage(const Move &move, const Pokemon &attacker, const Pokemon &defender);
 
-    Move& atk( BattlePokemon& token, BattlePokemon& enemy);
+    bool battle();
+    bool bag();
+    bool swap();
+    bool checkWin(bool isOpponent);
+    bool performStatus();
+    bool move(const Pokemon &attacker, Pokemon &defender, Move &move, bool isOpponent);
 };
 
