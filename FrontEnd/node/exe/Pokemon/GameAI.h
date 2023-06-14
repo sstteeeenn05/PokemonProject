@@ -12,7 +12,7 @@ public:
     GameAI(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName,
              istream &input);
 
-    void serve() override;
+    void serve(std::ostream&) override;
 
     void battle();
     static int getDamage(Move& move,Pokemon& attacker, Pokemon& defender);

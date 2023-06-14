@@ -12,7 +12,7 @@ public:
     GameTest(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName,
              istream &input);
 
-    void serve() override;
+    void serve(std::ostream&) override;
 
     bool battle();
 

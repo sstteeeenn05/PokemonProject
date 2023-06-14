@@ -9,9 +9,8 @@ GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFi
     for (string line; getline(input, line) && line != "Test";) {}
 }
 
-void GameTest::serve() {
+void GameTest::serve(std::ostream& outputFile) {
     turn = 1;
-    ofstream outputFile("TestOutput.txt");
     for (string command; getline(input, command);) {
         if (command == "Status") {
             outputStatus();
@@ -42,7 +41,6 @@ void GameTest::serve() {
         ++turn;
     }
     flushOutputs(outputFile);
-    outputFile.close();
 }
 
 bool GameTest::battle() {

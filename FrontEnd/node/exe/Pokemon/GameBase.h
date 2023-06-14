@@ -68,5 +68,5 @@ protected:
 public:
     GameBase(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName);
 
-    virtual void serve() = 0;
+    virtual void serve(std::ostream&) = 0;
 };

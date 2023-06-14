@@ -49,6 +49,7 @@ document.addEventListener('alpine:init', () => {
       })
     },
     attackSound: new Audio('./assets/attack.mp3'),
+    healSound: new Audio('./assets/heal.wav'),
     // 0-player 1-enemy
     damage(index) {
       this.attackSound.pause()
@@ -79,6 +80,13 @@ document.addEventListener('alpine:init', () => {
     nextQueueMsg(){
       this.queue.shift();
       this.message=this.queue[0].shift();
+      if(this.message.includes('opposing')&&this.message.includes('fainted')) this.enemyId++;
+      if(this.message.includes('Come back!')) this.switchPokemonOut(0);
+      if(this.message.includes('Go!')){
+        let name=this.message.split('!')[1].replace(' ','');
+        this.playerId=this.constData.player.indexOf(this.constData.player.find((pokemon)=>pokemon.name==name));
+        this.switchPokemonIn(0);
+      }
       let i=0;
       this.queue[0].forEach((data)=>{
         let list=data.split(' ');
@@ -99,6 +107,7 @@ document.addEventListener('alpine:init', () => {
       console.log(pokemon);
       if(pokemon.hp!=hp){
         if(hp<pokemon.hp) this.damage(0);
+        else this.healSound.play();
         pokemon.hp=hp;
       }
     },
@@ -106,6 +115,7 @@ document.addEventListener('alpine:init', () => {
       let pokemon=this.dynamicData.enemy.find(item=>item.name==name);
       if(pokemon.hp!=hp){
         if(hp<pokemon.hp) this.damage(1);
+        else this.healSound.play();
         pokemon.hp=hp;
       }
     },

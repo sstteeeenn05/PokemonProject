@@ -5,10 +5,12 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 
-    const string pokemonFileName = "file/PokemonLib.txt";
-    const string moveFileName = "file/MoveLib.txt";
-    const string gameDataFileName = "file/GameData.txt";
-    const string testFileName = "file/TestCase.txt";
+    string path(argv[0]);
+    path=path.substr(0, path.rfind('\\'));
+    const string pokemonFileName = path + "/file/PokemonLib.txt";
+    const string moveFileName = path + "/file/MoveLib.txt";
+    const string gameDataFileName = path + "/file/GameData.txt";
+    const string testFileName = path + "/file/TestCase.txt";
 
     if (/*argc > 1 && string(argv[1]) == "Test"*/true) {
         ifstream testFile(testFileName);
@@ -16,13 +18,15 @@ int main(int argc, char *argv[]) {
             throw FileOpenError(testFileName);
         }
         GameTest game(pokemonFileName, moveFileName, gameDataFileName, testFile);
-        game.serve();
+        ofstream outputFile(path + "/TestOutput.txt");
+        game.serve(outputFile);
         testFile.close();
-    } else {
+        outputFile.close();
+    }
+    else {
         // GameAI game(pokemonFileName, moveFileName, gameDataFileName);
         // game.serve();
     }
-
     cin.ignore(1000);
     return 0;
 }

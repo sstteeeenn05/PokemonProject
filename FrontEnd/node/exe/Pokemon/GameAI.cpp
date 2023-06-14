@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void GameAI::serve() {
+void GameAI::serve(std::ostream&) {
     stringstream stream;
     for (string command; getline(input, command); flushOutputs(stream)) {
         if (command == "Status") {

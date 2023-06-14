@@ -1,7 +1,7 @@
 const pipe=require('child_process');
 const fs=require('fs');
 
-let game=pipe.execFile(`${__dirname}/exe/Pokemon.exe`);
+let game=pipe.exec(`${__dirname}\\exe\\Pokemon.exe`);
 
 let canOutput=false;
 
