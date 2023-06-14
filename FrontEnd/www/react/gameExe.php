@@ -3,6 +3,7 @@
     require_once "../phpapi/React.php";
     if(!isset($_POST['command'])) React::reject("Lost argument");
     if(!isset($_SESSION['pipes'])) React::reject("Game not start");
+    if(!file_exists($_SESSION['pipes']['stdin'])) React::reject("Can't write now");
     $stdin=fopen($_SESSION['pipes']['stdin'],'w');
     fwrite($stdin,$_POST['command']);
     fclose($stdin);
@@ -11,5 +12,5 @@
     $output=stream_get_contents($stdout);
     fclose($stdout);
     unlink($_SESSION['pipes']['stdout']);
-    React::resolve($output);
+    React::resolve(React::arrayToDom(explode(';',$output)));
 ?>

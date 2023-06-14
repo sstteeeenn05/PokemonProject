@@ -1,9 +1,19 @@
 import './jsapi/Alpine.js'
 import {Database} from "./jsapi/Database.js"
+import {Game} from "./jsapi/Game.js"
 
 let db = new Database();
+let game=new Game();
 
 document.addEventListener('alpine:init', () => {
+  Alpine.store('game',{
+    data:{},
+    initData(){
+      game.initData().then((resolve)=>{
+        this.data=resolve;
+      })
+    }
+  })
   Alpine.store('modal', {
     type: '',
     listData: [1, 2, 3, 4],

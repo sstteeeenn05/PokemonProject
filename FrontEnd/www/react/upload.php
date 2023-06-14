@@ -9,6 +9,7 @@
         public $spdef=0;
         public $speed=0;
         public $level=50;
+        public $moves=array();
     }
 
     class Move{
@@ -21,28 +22,42 @@
         public $con="";
     }
 
+    class GameData{
+        public $myPokemons=array();
+        public $opponentPokemons=array();
+    }
+
+    function findByName($arr,$name){
+        foreach($arr as $item){
+            if($item->name==$name) return $item;
+        }
+        throw new Exception("item:".$name." not exist");
+    }
+
+    $stderr=fopen('stderr.txt','a');
+
     require_once "../phpapi/React.php";
     if(!isset($_POST['uploadName'])) React::reject("Lost argument");
+    $libDir=$_SERVER['DOCUMENT_ROOT']."\\lib\\";
     $fileName=$_POST['uploadName'];
-    $libArray=array();
+    $output;
     try{
+        $file=fopen($_FILES['uploadFile']['tmp_name'],'r');
         switch($_POST['uploadName']){
             case "PokemonLib":
-                $file=fopen($_FILES['uploadFile']['tmp_name'],'r');
+                $output=array();
                 while(!feof($file)){
                     $pokemon=new Pokemon();
                     fscanf($file,"%s",$pokemon->name);
                     $pokemon->types=explode(' ',preg_replace('/[\x00-\x1F\x7F]/','',fgets($file)));
                     array_shift($pokemon->types);
                     fscanf($file,"%d %d %d %d %d %d",$pokemon->hp,$pokemon->atk,$pokemon->def,$pokemon->spatk,$pokemon->spdef,$pokemon->speed);
-                    $libArray[]=$pokemon;
+                    $output[]=$pokemon;
                     unset($pokemon);
                 }
-                fclose($file);
                 break;
             case "MoveLib":
-                $moveList=array();
-                $file=fopen($_FILES['uploadFile']['tmp_name'],'r');
+                $output=array();
                 while(!feof($file)){
                     $move=new Move();
                     $arr=explode(' ',preg_replace('/[\x00-\x1F\x7F]/','',fgets($file)));
@@ -54,23 +69,76 @@
                     $move->accuracy=intval($arr[4]);
                     $move->pp=intval($arr[5]);
                     if(isset($arr[6])) $move->con=$arr[6];
-                    $libArray[]=$move;
+                    $output[]=$move;
                     unset($move);
                 }
-                fclose($file);
                 break;
             case "GameData":
-
+                if(!file_exists($libDir."PokemonLib.json")) throw new Exception("Missing PokemonLib.json");
+                if(!file_exists($libDir."MoveLib.json")) throw new Exception("Missing MoveLib.json");
+                $tmpStream=fopen($libDir."PokemonLib.json",'r');
+                $pokemonLib=json_decode(
+                    preg_replace(
+                        '/[\x00-\x1F\x7F]/',
+                        '',
+                        fread($tmpStream,filesize($libDir."PokemonLib.json")))
+                );
+                fclose($tmpStream);
+                $tmpStream=fopen($libDir."MoveLib.json",'r');
+                $moveLib=json_decode(
+                    preg_replace(
+                        '/[\x00-\x1F\x7F]/',
+                        '',
+                        fread($tmpStream,filesize($libDir."MoveLib.json")))
+                );
+                fclose($tmpStream);
+                $output=new GameData();
+                $myCount=0;
+                $opponentCount=0;
+                fscanf($file,"%d",$myCount);
+                for($i=0;$i<$myCount;$i++){
+                    $name="";
+                    fscanf($file,"%s",$name);
+                    $pokemon=findByName($pokemonLib,$name);
+                    $pokemon->moves=array_map(
+                        function($m_name)use($moveLib){
+                            return findByName($moveLib,$m_name);
+                        },
+                        explode(' ',preg_replace(
+                            '/[\x00-\x1F\x7F]/',
+                            '',
+                            fgets($file)
+                        ))
+                    );
+                    $output->myPokemons[]=$pokemon;
+                }
+                fscanf($file,"%d",$opponentCount);
+                for($i=0;$i<$opponentCount;$i++){
+                    fscanf($file,"%s",$name);
+                    $pokemon=findByName($pokemonLib,$name);
+                    $pokemon->moves=array_map(
+                        function($m_name)use($moveLib){
+                            return findByName($moveLib,$m_name);
+                        },
+                        explode(' ',preg_replace(
+                            '/[\x00-\x1F\x7F]/',
+                            '',
+                            fgets($file)
+                        ))
+                    );
+                    $output->opponentPokemons[]=$pokemon;
+                }
                 break;
             default:
-                React::reject("Bad Header");
+                throw new Exception("Bad Header");
         }
     }catch(Exception $e){
         React::reject($e->getMessage());
     }finally{
+        fclose($file);
         move_uploaded_file($_FILES['uploadFile']['tmp_name'],$_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\".$fileName.".txt");
-        $file=fopen($_SERVER['DOCUMENT_ROOT']."\\lib\\".$fileName.".json",'w');
-        fwrite($file,json_encode($libArray));
+        $file=fopen($libDir.$fileName.".json",'w');
+        fwrite($file,json_encode($output, JSON_PRETTY_PRINT));
         fclose($file);
         React::resolve("Upload Ok!");
     }

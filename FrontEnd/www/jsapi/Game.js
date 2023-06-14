@@ -7,7 +7,11 @@ export class Game{
     send(command){
         let data=new FormData();
         data.append('command',command); 
-        return new XHR('/react/gameExe.php').send(data);
+        return new Promise((resolve,reject)=>{
+            new XHR('/react/gameExe.php').send(data).then((dom)=>{
+                resolve(dom.querySelectorAll('item'));
+            }).catch((err)=>{reject(err)})
+        })
     }
     move(moveName){
         return this.send(`Battle ${moveName}`);
@@ -37,5 +41,14 @@ export class Game{
           reject(err);
         })
       })
+    }
+    initData(){
+        return new Promise((resolve,reject)=>{
+            new XHR('/lib/GameData.json').get('json').then((json)=>{
+                resolve(JSON.parse(json));
+            }).catch((err)=>{
+                reject(err);
+            })
+        })
     }
 }

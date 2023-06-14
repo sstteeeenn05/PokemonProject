@@ -1,0 +1,316 @@
+{
+    "myPokemons": [
+        {
+            "name": "Venusaur",
+            "types": [
+                "Grass",
+                "Poison"
+            ],
+            "hp": 187,
+            "atk": 147,
+            "def": 148,
+            "spatk": 167,
+            "spdef": 167,
+            "speed": 145,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "PoisonPowder",
+                    "type": "Poison",
+                    "isPhysical": false,
+                    "power": 0,
+                    "accuracy": 75,
+                    "pp": 35,
+                    "con": "PSN"
+                },
+                {
+                    "name": "VineWhip",
+                    "type": "Grass",
+                    "isPhysical": true,
+                    "power": 45,
+                    "accuracy": 100,
+                    "pp": 25,
+                    "con": ""
+                },
+                {
+                    "name": "SeedBomb",
+                    "type": "Grass",
+                    "isPhysical": true,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": ""
+                },
+                {
+                    "name": "SolarBeam",
+                    "type": "Grass",
+                    "isPhysical": false,
+                    "power": 120,
+                    "accuracy": 100,
+                    "pp": 10,
+                    "con": ""
+                }
+            ]
+        },
+        {
+            "name": "Charizard",
+            "types": [
+                "Fire",
+                "Flying"
+            ],
+            "hp": 185,
+            "atk": 149,
+            "def": 143,
+            "spatk": 177,
+            "spdef": 150,
+            "speed": 167,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "DragonClaw",
+                    "type": "Dragon",
+                    "isPhysical": true,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": ""
+                },
+                {
+                    "name": "Flamethrower",
+                    "type": "Fire",
+                    "isPhysical": false,
+                    "power": 90,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": "BRN"
+                },
+                {
+                    "name": "DragonBreath",
+                    "type": "Dragon",
+                    "isPhysical": false,
+                    "power": 60,
+                    "accuracy": 100,
+                    "pp": 20,
+                    "con": "PAR"
+                },
+                {
+                    "name": "AirSlash",
+                    "type": "Flying",
+                    "isPhysical": true,
+                    "power": 75,
+                    "accuracy": 95,
+                    "pp": 15,
+                    "con": ""
+                }
+            ]
+        },
+        {
+            "name": "Blastoise",
+            "types": [
+                "Water"
+            ],
+            "hp": 186,
+            "atk": 148,
+            "def": 167,
+            "spatk": 150,
+            "spdef": 172,
+            "speed": 143,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "FlashCannon",
+                    "type": "Steel",
+                    "isPhysical": false,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 10,
+                    "con": ""
+                },
+                {
+                    "name": "WaterGun",
+                    "type": "Water",
+                    "isPhysical": false,
+                    "power": 40,
+                    "accuracy": 100,
+                    "pp": 25,
+                    "con": ""
+                },
+                {
+                    "name": "WaterPulse",
+                    "type": "Water",
+                    "isPhysical": false,
+                    "power": 60,
+                    "accuracy": 100,
+                    "pp": 20,
+                    "con": ""
+                },
+                {
+                    "name": "AquaTail",
+                    "type": "Water",
+                    "isPhysical": true,
+                    "power": 90,
+                    "accuracy": 90,
+                    "pp": 10,
+                    "con": ""
+                }
+            ]
+        }
+    ],
+    "opponentPokemons": [
+        {
+            "name": "Blastoise",
+            "types": [
+                "Water"
+            ],
+            "hp": 186,
+            "atk": 148,
+            "def": 167,
+            "spatk": 150,
+            "spdef": 172,
+            "speed": 143,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "FlashCannon",
+                    "type": "Steel",
+                    "isPhysical": false,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 10,
+                    "con": ""
+                },
+                {
+                    "name": "WaterGun",
+                    "type": "Water",
+                    "isPhysical": false,
+                    "power": 40,
+                    "accuracy": 100,
+                    "pp": 25,
+                    "con": ""
+                },
+                {
+                    "name": "WaterPulse",
+                    "type": "Water",
+                    "isPhysical": false,
+                    "power": 60,
+                    "accuracy": 100,
+                    "pp": 20,
+                    "con": ""
+                },
+                {
+                    "name": "AquaTail",
+                    "type": "Water",
+                    "isPhysical": true,
+                    "power": 90,
+                    "accuracy": 90,
+                    "pp": 10,
+                    "con": ""
+                }
+            ]
+        },
+        {
+            "name": "Charizard",
+            "types": [
+                "Fire",
+                "Flying"
+            ],
+            "hp": 185,
+            "atk": 149,
+            "def": 143,
+            "spatk": 177,
+            "spdef": 150,
+            "speed": 167,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "DragonClaw",
+                    "type": "Dragon",
+                    "isPhysical": true,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": ""
+                },
+                {
+                    "name": "Flamethrower",
+                    "type": "Fire",
+                    "isPhysical": false,
+                    "power": 90,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": "BRN"
+                },
+                {
+                    "name": "DragonBreath",
+                    "type": "Dragon",
+                    "isPhysical": false,
+                    "power": 60,
+                    "accuracy": 100,
+                    "pp": 20,
+                    "con": "PAR"
+                },
+                {
+                    "name": "AirSlash",
+                    "type": "Flying",
+                    "isPhysical": true,
+                    "power": 75,
+                    "accuracy": 95,
+                    "pp": 15,
+                    "con": ""
+                }
+            ]
+        },
+        {
+            "name": "Venusaur",
+            "types": [
+                "Grass",
+                "Poison"
+            ],
+            "hp": 187,
+            "atk": 147,
+            "def": 148,
+            "spatk": 167,
+            "spdef": 167,
+            "speed": 145,
+            "level": 50,
+            "moves": [
+                {
+                    "name": "PoisonPowder",
+                    "type": "Poison",
+                    "isPhysical": false,
+                    "power": 0,
+                    "accuracy": 75,
+                    "pp": 35,
+                    "con": "PSN"
+                },
+                {
+                    "name": "VineWhip",
+                    "type": "Grass",
+                    "isPhysical": true,
+                    "power": 45,
+                    "accuracy": 100,
+                    "pp": 25,
+                    "con": ""
+                },
+                {
+                    "name": "SeedBomb",
+                    "type": "Grass",
+                    "isPhysical": true,
+                    "power": 80,
+                    "accuracy": 100,
+                    "pp": 15,
+                    "con": ""
+                },
+                {
+                    "name": "SolarBeam",
+                    "type": "Grass",
+                    "isPhysical": false,
+                    "power": 120,
+                    "accuracy": 100,
+                    "pp": 10,
+                    "con": ""
+                }
+            ]
+        }
+    ]
+}
