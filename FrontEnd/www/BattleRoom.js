@@ -61,13 +61,18 @@ document.addEventListener('alpine:init', () => {
       this.isSwitchingClassName[index] = 'switch-out'
       setTimeout(()=>{
         this.isSwitchingClassName[index] = 'rotating'
-      }, 999)
+      }, 995)
     },
     switchPokemonIn(index) {
-      this.isSwitchingClassName[index] = 'switch-in'
-      setTimeout(()=>{
-        this.isSwitchingClassName[index] = ''
-      }, 999)
+      let listener = setInterval(() => {
+        if (this.isSwitchingClassName[index] === 'rotating') {
+          this.isSwitchingClassName[index] = 'switch-in'
+          setTimeout(() => {
+            this.isSwitchingClassName[index] = ''
+          }, 995)
+          clearInterval(listener);
+        }
+      }, 1)
     },
     nextQueueMsg(){
       this.queue.shift();
