@@ -51,7 +51,9 @@ document.addEventListener('alpine:init', () => {
     attackSound: new Audio('./assets/attack.mp3'),
     // 0-player 1-enemy
     damage(index) {
-      this.attackSound.play();
+      this.attackSound.pause()
+      this.attackSound.currentTime = 0;
+      this.attackSound.play()
       this.isDamaged[index] = true
       setTimeout(()=>{
         this.isDamaged[index] = false
@@ -148,6 +150,11 @@ document.addEventListener('alpine:init', () => {
         this.canMainShow = true
       }, 1000)
     },
+    buttonClick(){
+      this.buttonSound.pause()
+      this.buttonSound.currentTime = 0;
+      this.buttonSound.play()
+    }
   })
 
   Alpine.store('modal', {

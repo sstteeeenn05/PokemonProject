@@ -87,10 +87,10 @@
 	<div class="move-menu">
 		<span class="context" x-text="$store.game.message" @click="$store.game.nextQueueMsg()" style="cursor:pointer"></span>
 		<div class="move-section">
-				<button class="move-button" @click="$store.modal.open('fight'); $store.loading.buttonSound.play();">Fight</button>
-				<button class="move-button" @click="$store.modal.open('bag'); $store.loading.buttonSound.play();">Bag</button>
-				<button class="move-button" @click="$store.modal.open('pokemon'); $store.loading.buttonSound.play();">Pokémon</button>
-				<button class="move-button" @click="location.href = '/'; $store.loading.buttonSound.play();">Exit</button>
+				<button class="move-button" @click="$store.modal.open('fight'); $store.loading.buttonClick();">Fight</button>
+				<button class="move-button" @click="$store.modal.open('bag'); $store.loading.buttonClick();">Bag</button>
+				<button class="move-button" @click="$store.modal.open('pokemon'); $store.loading.buttonClick();">Pokémon</button>
+				<button class="move-button" @click="location.href = '/'; $store.loading.buttonClick();">Exit</button>
 		</div>
 	</div>
 </div>
@@ -176,7 +176,7 @@
 		</div>
 
 	</div>
-	<button class="modal-button cancel close" @click="$store.modal.close(); $store.loading.buttonSound.play();">cancel</button>
+	<button class="modal-button cancel close" @click="$store.modal.close(); $store.loading.buttonClick();">cancel</button>
 </dialog>
 
 </body>
