@@ -67,12 +67,12 @@
             "level": 50,
             "moves": [
                 {
-                    "name": "DragonClaw",
-                    "type": "Dragon",
-                    "isPhysical": true,
-                    "power": 80,
+                    "name": "Ember",
+                    "type": "Fire",
+                    "isPhysical": false,
+                    "power": 40,
                     "accuracy": 100,
-                    "pp": 15,
+                    "pp": 25,
                     "con": ""
                 },
                 {

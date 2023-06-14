@@ -29,7 +29,9 @@
 
     function findByName($arr,$name){
         foreach($arr as $item){
-            if($item->name==$name) return $item;
+            if($item->name==$name){
+                return clone $item;
+            }
         }
         throw new Exception("item:".$name." not exist");
     }
@@ -114,6 +116,7 @@
                 }
                 fscanf($file,"%d",$opponentCount);
                 for($i=0;$i<$opponentCount;$i++){
+                    $name="";
                     fscanf($file,"%s",$name);
                     $pokemon=findByName($pokemonLib,$name);
                     $pokemon->moves=array_map(
