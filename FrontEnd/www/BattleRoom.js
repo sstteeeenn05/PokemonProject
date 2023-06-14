@@ -80,7 +80,11 @@ document.addEventListener('alpine:init', () => {
     nextQueueMsg(){
       this.queue.shift();
       this.message=this.queue[0].shift();
-      if(this.message.includes('opposing')&&this.message.includes('fainted')) this.enemyId++;
+      if(this.message.includes('opposing')&&this.message.includes('fainted')) {
+        this.switchPokemonOut(1)
+        setTimeout(()=>{this.enemyId++;}, 1000);
+        this.switchPokemonIn(1)
+      }
       if(this.message.includes('Come back!')) this.switchPokemonOut(0);
       if(this.message.includes('Go!')){
         let name=this.message.split('!')[1].replace(' ','');
