@@ -9,8 +9,8 @@
 <body x-data x-cloak>
 <div class="main">
 
-	<img class="enemy-pokemon-img" draggable="false" :src="'./assets/'+$store.modal.potionList[3][0]">
-	<img class="player-pokemon-img" draggable="false" :src="'./assets/'+$store.modal.potionList[2][0]">
+	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.opponentPokemons[0].src">
+	<img class="player-pokemon-img" draggable="false" :src="$store.game.myPokemons[0].src">
 
 	<div class="enemy-info">
 		<div class="info-upper">
@@ -75,26 +75,22 @@
 	<div class="data-list">
 
 		<div class="fight-selection-section" x-show="$store.modal.type === 'fight'">
-			<template x-for="data in $store.modal.listData" :key="index">
+			<template x-for="move in $store.game.myPokemons[0].moves" :key="index">
 				<div class="fight-data">
 					<div class="skill-title">
-						<h2 x-text="'Water Gun'" style="margin: 0; display: inline-block"></h2>
+						<h2 x-text="move.name" style="margin: 0; display: inline-block"></h2>
 						<div>
-							<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-								<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.skillType[index]">
-							</template>
+							<img class="icon" draggable="false" :src="'./assets/' + move.type + '.png'">
 						</div>
 					</div>
 					<div class="skill-description">
-						<div class="condition-list">
-							<span style="font-size: x-large; margin-right: 2px">Cons:</span>
-							<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-								<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.skillCondition[index]">
-							</template>
+						<div class="condition-list" x-show="move.con">
+							<span style="font-size: x-large; margin-right: 2px">Con:</span>
+							<img class="icon" draggable="false" :src="'./assets/' + move.con + '.svg'">
 						</div>
 						<div class="skill-detail">
-							<span class="skill-form" x-text="'Psychical'"></span>
-							<span class="skill-point" x-text="'PP: 10/10'"></span>
+							<span class="skill-form" x-text="move.type=='Potion'?'Potion':move.isPhysical?'Physical':'Special'"></span>
+							<span class="skill-point" x-text="'PP: '+move.pp+'/10'"></span>
 						</div>
 					</div>
 				</div>
@@ -120,25 +116,25 @@
 		</div>
 
 		<div x-show="$store.modal.type === 'pokemon'">
-			<template x-for="data in $store.modal.listData" :key="index">
+			<template x-for="pokemon in $store.game.myPokemons" :key="index">
 				<table class="pokemon-table">
 					<tr>
 						<td class="pokemon-data-img-container">
-							<img class="pokemon-data-img" draggable="false">
+							<img class="pokemon-data-img" :src="pokemon.src" draggable="false">
 						</td>
 						<td>
 							<div class="pokemon-data">
 								<div class="pokemon-data-upper">
 									<div class="pokemon-name-section">
-										<span class="pokemon-name" x-text="'nani'"></span>
-										<template x-for="(icon, index) in $store.modal.typeIconList" :key="index">
-											<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonType[index]">
+										<span class="pokemon-name" x-text="pokemon.name"></span>
+										<template x-for="(icon, index) in pokemon.types" :key="index">
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" x-show="pokemon.types">
 										</template>
-										<span class="level" x-text="'lv69'"></span>
+										<span class="level" x-text="'lv'+pokemon.level"></span>
 									</div>
 									<div class="icons">
-										<template x-for="(icon, index) in $store.modal.conIconList" :key="index">
-											<img class="icon" draggable="false" :src="'./assets/' + icon" x-show="$store.modal.pokemonCondition[index]">
+										<template x-for="(icon, index) in pokemon.cons" :key="index">
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" x-show="pokemon.cons">
 										</template>
 									</div>
 								</div>
@@ -146,7 +142,7 @@
 									<div class="pokemon-health-out pokemon-data-health-out">
 										<div class="pokemon-health-in"></div>
 									</div>
-									<span class="health pokemon-data-health" x-text="'1000/1000'"></span>
+									<span class="health pokemon-data-health" x-text="pokemon.hp+'/1000'"></span>
 								</div>
 							</div>
 						</td>

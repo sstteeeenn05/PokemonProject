@@ -9,12 +9,18 @@ document.addEventListener('alpine:init', () => {
   Alpine.store('game',{
     myPokemons:[],
     opponentPokemons:[],
-    initData(){
+    init(){
+      game.start().then((resolve)=>{
+        console.log(resolve);
+      }).catch((reject)=>{
+        alert(reject);
+        location.href="/";
+      })
       game.initData().then((resolve)=>{
         this.myPokemons=resolve.myPokemons;
-        parsePicture(this.myPokemons);
+        this.parsePicture(this.myPokemons);
         this.opponentPokemons=resolve.opponentPokemons;
-        parsePicture(this.opponentPokemons);
+        this.parsePicture(this.opponentPokemons);
       })
     },
     parsePicture(pokemons){

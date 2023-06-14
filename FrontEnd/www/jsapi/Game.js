@@ -43,12 +43,6 @@ export class Game{
       })
     }
     initData(){
-        return new Promise((resolve,reject)=>{
-            new XHR('/lib/GameData.json').get('json').then((json)=>{
-                resolve(JSON.parse(json));
-            }).catch((err)=>{
-                reject(err);
-            })
-        })
+        return new XHR('/lib/GameData.json').get('json');
     }
 }
