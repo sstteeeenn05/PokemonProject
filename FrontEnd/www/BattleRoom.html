@@ -149,13 +149,13 @@
 									<div class="pokemon-name-section">
 										<span class="pokemon-name" x-text="pokemon.name"></span>
 										<template x-for="(icon, index) in pokemon.types" :key="index" x-show="pokemon.types">
-											<img class="icon" draggable="false" :src="'./assets/' + icon + '.svg'" >
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" >
 										</template>
 										<span class="level" x-text="'lv'+pokemon.level"></span>
 									</div>
 									<div class="icons">
 										<template x-for="(icon, index) in pokemon.cons" :key="index" x-show="pokemon.cons">
-											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'">
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.svg'">
 										</template>
 									</div>
 								</div>
