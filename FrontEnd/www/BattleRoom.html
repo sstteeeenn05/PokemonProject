@@ -149,7 +149,7 @@
 									<div class="pokemon-name-section">
 										<span class="pokemon-name" x-text="pokemon.name"></span>
 										<template x-for="(icon, index) in pokemon.types" :key="index" x-show="pokemon.types">
-											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" >
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.svg'" >
 										</template>
 										<span class="level" x-text="'lv'+pokemon.level"></span>
 									</div>
