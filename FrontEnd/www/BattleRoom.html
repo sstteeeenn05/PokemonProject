@@ -90,13 +90,13 @@
 						</div>
 					</div>
 					<div class="skill-description">
-						<div class="condition-list" x-show="move.con">
-							<span style="font-size: x-large; margin-right: 2px">Con:</span>
-							<img class="icon" draggable="false" :src="'./assets/' + move.con + '.svg'">
-						</div>
 						<div class="skill-detail">
 							<span class="skill-form" x-text="move.type=='Potion'?'Potion':move.isPhysical?'Physical':'Special'"></span>
 							<span class="skill-point" x-text="'PP: '+$store.game.dynamicData.player[0].moves[index].pp+'/'+move.pp"></span>
+						</div>
+						<div class="condition-list" x-show="move.con">
+							<span style="font-size: x-large; margin-right: 2px">Con:</span>
+							<img class="icon" draggable="false" :src="'./assets/' + move.con + '.svg'">
 						</div>
 					</div>
 				</div>
@@ -126,21 +126,21 @@
 				<table class="pokemon-table">
 					<tr>
 						<td class="pokemon-data-img-container">
-							<img class="pokemon-data-img" :src="pokemon.src" draggable="false">
+							<img class="pokemon-data-img" :src="$store.game.constData.player[index].src" draggable="false">
 						</td>
 						<td>
 							<div class="pokemon-data">
 								<div class="pokemon-data-upper">
 									<div class="pokemon-name-section">
 										<span class="pokemon-name" x-text="pokemon.name"></span>
-										<template x-for="(icon, index) in pokemon.types" :key="index">
-											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" x-show="pokemon.types">
+										<template x-for="(icon, index) in pokemon.types" :key="index" x-show="pokemon.types">
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" >
 										</template>
 										<span class="level" x-text="'lv'+pokemon.level"></span>
 									</div>
 									<div class="icons">
-										<template x-for="(icon, index) in pokemon.cons" :key="index">
-											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'" x-show="pokemon.cons">
+										<template x-for="(icon, index) in pokemon.cons" :key="index" x-show="pokemon.cons">
+											<img class="icon" draggable="false" :src="'./assets/' + icon + '.png'">
 										</template>
 									</div>
 								</div>

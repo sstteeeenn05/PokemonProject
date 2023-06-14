@@ -28,6 +28,7 @@ let interval=setInterval(()=>{
             if(command=='kill'){
                 game.stdin.write("\x03");
                 clearInterval(interval);
+                fs.writeFile(`${__dirname}/exe/stdout.txt`,"exit",()=>{});
                 process.exit();
             }
             game.stdin.write(command);

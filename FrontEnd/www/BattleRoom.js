@@ -5,6 +5,11 @@ import {Game} from "./jsapi/Game.js"
 let db = new Database();
 let game=new Game();
 
+window.addEventListener('beforeunload', (e) => {
+  e.preventDefault();
+  game.exit();
+});
+
 document.addEventListener('alpine:init', () => {
   Alpine.store('game',{
     constData:{},
