@@ -92,11 +92,13 @@ document.addEventListener('alpine:init', () => {
         let list=data.split(' ');
         let name=list[0];
         let hp=list[1];
+        console.log(list)
         if(i<3) this.damagePlayerPokemon(name,hp);
         else this.damageEnemyPokemon(name,hp);
-        for(let j=2;j<6;j++){
+        for(let j=1;j<5;j++){
           let moveName=list[j*2];
           let movePP=list[j*2+1];
+          console.log(moveName)
           if(i<3) this.changePlayerMovePP(name, moveName, movePP);
           else this.changeEnemyMovePP(name, moveName, movePP);
         }
@@ -110,7 +112,6 @@ document.addEventListener('alpine:init', () => {
     },
     damagePlayerPokemon(name,hp){
       let pokemon=this.dynamicData.player.find(item=>item.name===name);
-      console.log(pokemon);
       if(pokemon.hp!==hp){
         if(hp<pokemon.hp) this.damage(0);
         else this.healSound.play();
@@ -128,7 +129,6 @@ document.addEventListener('alpine:init', () => {
     changePlayerMovePP(name,moveName,pp){
       let pokemon=this.constData.player.find(item=>item.name===name);
       let move=pokemon.moves.find(move=>move.name===moveName);
-      console.log(moveName)
       if(move.pp!==pp){
         move.pp=pp;
       }
