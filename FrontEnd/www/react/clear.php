@@ -19,8 +19,8 @@
     try{
         removeDir($_SERVER['DOCUMENT_ROOT']."\\lib\\");
         mkdir($_SERVER['DOCUMENT_ROOT']."\\lib\\");
-        removeDir($_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\");
-        mkdir($_SERVER['DOCUMENT_ROOT']."\\..\\node\\exe\\file\\");
+        removeDir($_SERVER['DOCUMENT_ROOT']."\\exe\\file\\");
+        mkdir($_SERVER['DOCUMENT_ROOT']."\\exe\\file\\");
     }catch(Exception $e){
         React::reject($e->getMessage());
     }finally{
