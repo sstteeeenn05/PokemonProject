@@ -5,7 +5,7 @@
 #include "Types.h"
 
 class Pokemon {
-private:
+protected:
     const std::string name;
     const std::set<Type> typeList;
     const int maxHp;

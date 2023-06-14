@@ -75,14 +75,10 @@ double Move::calcSTAB(const std::set<Type> &defenderTypeList) const {
 double Move::calcTypeEffect(const std::set<Type> &defenderTypeList) const {
     const double *effectRow = TypeEffect[static_cast<size_t>(type)];
     double effect = 1.0;
-    for (const Type defType : defenderTypeList) {
+    for (const Type defType: defenderTypeList) {
         effect *= effectRow[static_cast<size_t>(defType)];
     }
     return effect;
-}
-
-int Move::calcDamage(const Pokemon& attacker, const Pokemon& defender) const {
-    return calcBaseDamage(attacker, defender) * calcSTAB(defender.getTypeList()) * calcTypeEffect(defender.getTypeList());
 }
 
 bool Move::canUse() const {

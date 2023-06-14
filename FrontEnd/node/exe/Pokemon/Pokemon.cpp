@@ -105,7 +105,7 @@ void Pokemon::heal(const int amount) {
 }
 
 void Pokemon::damage(const int amount) {
-    hp -= amount;
+    hp = std::max(0, hp - amount);
 }
 
 void Pokemon::addStatus(const Status status) {

@@ -1,6 +1,7 @@
 #include "GameBase.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 namespace {
     BattlePokemon readPokemon(std::map<std::string, Pokemon> &pokemonMap, std::map<std::string, Move> &moveMap,
@@ -10,7 +11,7 @@ namespace {
         input >> pokemonName >> moveCount;
         const auto pokemonIt = pokemonMap.find(pokemonName);
         if (pokemonIt == pokemonMap.cend()) {
-            throw InvalidPokemonError(pokemonName);
+            throw PokemonNotfoundError(pokemonName);
         }
 
         std::map<std::string, Move> moveList;
@@ -19,7 +20,7 @@ namespace {
             input >> moveName;
             const auto moveIt = moveMap.find(moveName);
             if (moveIt == moveMap.cend()) {
-                throw InvalidMoveError(moveName);
+                throw MoveNotFoundError(moveName);
             }
             moveList.emplace(moveName, moveIt->second);
         }
@@ -145,9 +146,21 @@ void GameBase::outputStatus() {
     outputs.emplace(playerPokemonIt->second.getStatusString() + ' ' + opponentPokemonIt->getStatusString());
 }
 
+void GameBase::outputCheck() {
+    std::stringstream stream;
+    for (const auto &pair : playerPokemonIt->second.getMoveMap()) {
+        stream << pair.second.getName() << ' ' << pair.second.getPowerPoint();
+    }
+    outputs.emplace(stream.str());
+}
+
 void GameBase::outputPotion(const std::string &pokemonName, const std::string &potionName, const bool isOpponent) {
     outputs.emplace(std::string(isOpponent ? "Opponent" : "You") + " used a " + potionName + '!');
     outputs.emplace(opponentPrefix(pokemonName, isOpponent) + " had its HP restored.");
+}
+
+void GameBase::outputFainted(const std::string &defenderName, const bool isOpponent) {
+    outputs.emplace(opponentPrefix(defenderName, isOpponent) + " is fainted");
 }
 
 void GameBase::outputComeBack(const std::string &pokemonName, const bool isOpponent) {
@@ -184,8 +197,45 @@ void GameBase::flushOutputs() {
 void GameBase::playerSwapPokemon(const std::string &pokemonName) {
     const auto it = playerPokemonMap.find(pokemonName);
     if (it == playerPokemonMap.cend()) {
-        throw InvalidPokemonError(pokemonName);
+        throw PokemonNotfoundError(pokemonName);
     }
-
-
+    if (it->second.isFainting()) {
+        throw InvalidPokemonError(pokemonName + " is fainted");
+    }
+    playerPokemonIt = it;
 }
+
+void GameBase::opponentSwapPokemon(const std::string &pokemonName) {
+    const auto it = std::find(opponentPokemonList.begin(), opponentPokemonList.end(), pokemonName);
+    if (it == opponentPokemonList.cend()) {
+        throw PokemonNotfoundError(pokemonName);
+    }
+    if (it->isFainting()) {
+        throw InvalidPokemonError(pokemonName + " is fainted");
+    }
+    opponentPokemonIt = it;
+}
+
+void GameBase::playerUsePotion(const std::string &potionName, const std::string &pokemonName) {
+    const auto it = playerPokemonMap.find(pokemonName);
+    if (it == playerPokemonMap.cend()) {
+        throw PokemonNotfoundError(pokemonName);
+    }
+    if (it->second.isFainting()) {
+        throw InvalidPokemonError(pokemonName + " is fainted");
+    }
+    it->second.heal(PotionMap.at(potionName));
+}
+
+void GameBase::opponentUsePotion(const std::string &potionName, const std::string &pokemonName) {
+    const auto it = std::find(opponentPokemonList.begin(), opponentPokemonList.end(), pokemonName);
+    if (it == opponentPokemonList.cend()) {
+        throw PokemonNotfoundError(pokemonName);
+    }
+    if (it->isFainting()) {
+        throw InvalidPokemonError(pokemonName + " is fainted");
+    }
+    it->heal(PotionMap.at(potionName));
+}
+
+
