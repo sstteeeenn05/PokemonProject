@@ -82,7 +82,7 @@
 		</div>
 	</div>
 	<div class="move-menu">
-		<span class="context" x-text="'Nice to meet you'"></span>
+		<span class="context" x-text="$store.game.queue[0][0]" @click="$store.game.message" style="cursor:pointer"></span>
 		<div class="move-section">
 				<button class="move-button" @click="$store.modal.open('fight'); $store.loading.buttonSound.play();">Fight</button>
 				<button class="move-button" @click="$store.modal.open('bag'); $store.loading.buttonSound.play();">Bag</button>

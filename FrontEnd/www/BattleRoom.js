@@ -19,12 +19,12 @@ document.addEventListener('alpine:init', () => {
     opponentPokemons:[],
     playerId:0,
     enemyId:0,
-    queue:[],
     isDamaged: [false, false],
     isChanging: [false, false],
+    queue:[],
+    message:"You Enter A Battle!",
     init(){
       game.start("Test").then((resolve)=>{
-        console.log(resolve);
       }).catch((reject)=>{
         alert(reject);
         location.href="/";
@@ -36,9 +36,10 @@ document.addEventListener('alpine:init', () => {
         this.parsePicture(this.constData.enemy);
       })
       setTimeout(()=>{
-        game.getOutput((resolve)=>{
-          this.queue=resolve;
-          console.log(this.queue);
+        console.log("getting output");
+        game.getOutput().then((resolve)=>{
+          resolve.forEach((msg)=>this.queue.push(msg.split('$')));
+          console.log(resolve);
         })
       },1000);
     },
@@ -61,6 +62,62 @@ document.addEventListener('alpine:init', () => {
       setTimeout(()=>{
         this.isChanging[index] = false
       }, 2000)
+    },
+    nextQueueMsg(){
+      this.queue.shift();
+      this.message=this.queue[0].shift();
+      let i=0;
+      this.queue[0].forEach((data)=>{
+        let list=data.split(' ');
+        let name=list[0];
+        let hp=list[1];
+        if(i<3) damagePlayerPokemon(name,hp);
+        else damageEnemyPokemon(name,hp);
+        for(let i=0;i<4;i++){
+          let moveName=list[i*2];
+          let movePP=list[i*2+1];
+
+        }
+        i++;
+      })
+    },
+    damagePlayerPokemon(name,hp){
+      let id=this.constData.player.find(item=>item.name==name);
+      if(this.dynamicData.player[id].hp!=hp){
+        this.dynamicData.player[id].hp=hp;
+        this.damage(0);
+      }
+    },
+    damageEnemyPokemon(name,hp){
+      let id=this.constData.enemy.find(item=>item.name==name);
+      if(this.dynamicData.enemy[id].hp!=hp){
+        this.dynamicData.enemy[id].hp=hp;
+        this.damage(1);
+      }
+    },
+    changePlayerMovePP(name,moveName,pp){
+      let id=this.constData.player.find(item=>item.name==name);
+      let pokemon=this.dynamicData.player[id];
+      let moveId=pokemon.moves.find(move=>move.name==moveName);
+      let move=pokemon.moves[moveId];
+      if(move.pp!=pp){
+        move.pp=pp;
+      }
+    },
+    changeEnemyMovePP(name,moveName,pp){
+      let id=this.constData.enemy.find(item=>item.name==name);
+      let pokemon=this.dynamicData.player[id];
+      let moveId=pokemon.moves.find(move=>move.name==moveName);
+      let move=pokemon.moves[moveId];
+      if(move.pp!=pp){
+        move.pp=pp;
+      }
+    },
+    givePlayerPokemonCon(con){
+
+    },
+    giveEnemyPokemonCon(con){
+
     }
   })
 
