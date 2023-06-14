@@ -18,4 +18,3 @@ Pokemon
 Blastoise
 FlashCannon
 Status
-Run
