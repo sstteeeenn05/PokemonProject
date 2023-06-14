@@ -17,12 +17,12 @@
 </div>
 
 <div class="main" x-show="$store.loading.canMainShow">
-	<div class="enemy"  :class="{'damaged' :$store.game.isDamaged[1]}">
+	<div class="enemy"  :class="{'damaged' :$store.game.isDamaged[1]}" x-show="$store.game.enemyId < 3">
 		<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
 	</div>
 	<img class="enemy-cover" draggable="false" src="./assets/Pokeball.png" :class="$store.game.isSwitchingClassName[1]">
 
-	<div class="player" :class="{'damaged' :$store.game.isDamaged[0]}">
+	<div class="player" :class="{'damaged' :$store.game.isDamaged[0]}" x-show="$store.game.playerId < 3">
 		<img class="player-pokemon-img"  draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
 	</div>
 	<img class="player-cover" draggable="false" src="./assets/Pokeball.png" :class="$store.game.isSwitchingClassName[0]">
@@ -30,7 +30,7 @@
 	<div class="enemy-info" :style="{
 		'--health-width':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*100+'%',
 		'--color-value':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*255
-	}">
+	}" x-show="$store.game.enemyId < 3">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="enemy-pokemon-name" x-text="$store.game.constData.enemy[$store.game.enemyId].name"></span>
@@ -58,7 +58,7 @@
 	<div class="player-info" :style="{
 		'--health-width':$store.game.dynamicData.player[$store.game.playerId].hp/$store.game.constData.player[$store.game.playerId].hp*100+'%',
 		'--color-value':$store.game.dynamicData.player[$store.game.playerId].hp/$store.game.constData.player[$store.game.playerId].hp*255
-	}">
+	}" x-show="$store.game.playerId < 3">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="player-pokemon-name" x-text="$store.game.constData.player[$store.game.playerId].name"></span>
@@ -70,7 +70,7 @@
 
 			<div class="icons">
 				<template x-for="(icon, index) in $store.game.dynamicData.player[$store.game.playerId].cons" :key="index">
-					<img class="icon" draggable="false" :src="'./assets/' + icon '.svg'">
+					<img class="icon" draggable="false" :src="'./assets/' + icon + '.svg'">
 				</template>
 			</div>
 		</div>
@@ -84,7 +84,7 @@
 	<div class="move-menu">
 		<span class="context" x-text="$store.game.message" @click="$store.game.nextQueueMsg()" style="cursor:pointer"></span>
 		<div class="move-section">
-				<button class="move-button" @click="$store.modal.open('fight'); $store.loading.buttonClick();">Fight</button>
+				<button class="move-button" @click="$store.modal.open('fight'); $store.loading.buttonClick();">Moves</button>
 				<button class="move-button" @click="$store.modal.open('bag'); $store.loading.buttonClick();">Bag</button>
 				<button class="move-button" @click="$store.modal.open('pokemon'); $store.loading.buttonClick();">Pokémon</button>
 				<button class="move-button" @click="location.href = '/'; $store.loading.buttonClick();">Exit</button>
@@ -144,7 +144,9 @@
 							<img class="pokemon-data-img" :src="$store.game.constData.player[index].src" draggable="false">
 						</td>
 						<td>
-							<div class="pokemon-data">
+							<div class="pokemon-data" :style="{
+								'--health-width':pokemon.hp/$store.game.constData.player[index].hp*100+'%',
+								'--color-value': pokemon.hp/$store.game.constData.player[index].hp*255 }">
 								<div class="pokemon-data-upper">
 									<div class="pokemon-name-section">
 										<span class="pokemon-name" x-text="pokemon.name"></span>
