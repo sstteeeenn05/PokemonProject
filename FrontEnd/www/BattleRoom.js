@@ -67,10 +67,6 @@ document.addEventListener('alpine:init', () => {
       ['hyperPotion.png', 'Hyper Potion', 'Heal 120 Hp of your pokémon'],
       ['maxPotion.png', 'Max Potion', 'Heal 100% Hp of your pokémon']
     ],
-    pokemonType: [false, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false,],
-    pokemonCondition: [false, true, true],
-    skillType: [true, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false, false, false,],
-    skillCondition: [false, true, false],
     selectingPokemon() {
       this.type = 'pokemon';
     },

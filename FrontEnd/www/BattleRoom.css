@@ -41,8 +41,8 @@ body{
 }
 
 .enemy-info{
-    --health-width: 50%;
-    --color-value: 128;
+    --health-width: 100%;
+    --color-value: 255;
     z-index: 20;
     width: 30%;
     height: 20%;

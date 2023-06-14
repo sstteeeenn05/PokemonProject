@@ -12,7 +12,10 @@
 	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
 	<img class="player-pokemon-img" draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
 
-	<div class="enemy-info">
+	<div class="enemy-info" :style="{
+		'--health-width':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*100+'%',
+		'--color-value':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*255
+	}">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="enemy-pokemon-name" x-text="$store.game.constData.enemy[$store.game.enemyId].name"></span>
@@ -37,7 +40,10 @@
 		</div>
 	</div>
 
-	<div class="player-info">
+	<div class="player-info" :style="{
+		'--health-width':$store.game.dynamicData.player[$store.game.playerId].hp/$store.game.constData.player[$store.game.playerId].hp*100+'%',
+		'--color-value':$store.game.dynamicData.player[$store.game.playerId].hp/$store.game.constData.player[$store.game.playerId].hp*255
+	}">
 		<div class="info-upper">
 			<div class="pokemon-name-section">
 				<span class="pokemon-name" id="player-pokemon-name" x-text="$store.game.constData.player[$store.game.playerId].name"></span>
