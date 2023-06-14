@@ -3,7 +3,7 @@ import {Database} from "./jsapi/Database.js"
 import {Game} from "./jsapi/Game.js"
 
 let db = new Database();
-let game=new Game();
+let game = new Game();
 
 
 window.addEventListener('beforeunload', (e) => {
@@ -12,40 +12,46 @@ window.addEventListener('beforeunload', (e) => {
 });
 
 document.addEventListener('alpine:init', () => {
-  Alpine.store('game',{
-    constData:{},
-    dynamicData:{},
-    myPokemons:[],
-    opponentPokemons:[],
-    playerId:0,
-    enemyId:0,
+  Alpine.store('game', {
+    constData: {},
+    dynamicData: {},
+    myPokemons: [],
+    opponentPokemons: [],
+    playerId: 0,
+    enemyId: 0,
     isDamaged: [false, false],
     isSwitchingClassName: ['', ''],
-    queue:[[]],
-    message:"You Enter A Battle!",
-    init(){
-      game.start("Test").then((resolve)=>{
-      }).catch((reject)=>{
+    queue: [[]],
+    message: "You Enter A Battle!",
+    bgm: new Audio('./assets/bgm.mp3'),
+
+    init() {
+      setTimeout(() => {
+        this.bgm.play()
+        this.bgm.loop = true
+      }, 2500)
+      game.start("Test").then((resolve) => {
+      }).catch((reject) => {
         alert(reject);
-        location.href="/";
+        location.href = "/";
       })
-      game.initData().then((resolve)=>{
-        this.constData=structuredClone(resolve);
-        this.dynamicData=resolve;
+      game.initData().then((resolve) => {
+        this.constData = structuredClone(resolve);
+        this.dynamicData = resolve;
         this.parsePicture(this.constData.player);
         this.parsePicture(this.constData.enemy);
       })
-      setTimeout(()=>{
+      setTimeout(() => {
         console.log("getting output");
-        game.getOutput().then((resolve)=>{
-          resolve.forEach((msg)=>this.queue.push(msg.split('$')));
+        game.getOutput().then((resolve) => {
+          resolve.forEach((msg) => this.queue.push(msg.split('$')));
           console.log(this.queue);
         })
-      },1000);
+      }, 1000);
     },
-    parsePicture(pokemons){
-      pokemons.forEach((pokemon)=>{
-        pokemon.src=game.getPokemonPicByName(pokemon.name);
+    parsePicture(pokemons) {
+      pokemons.forEach((pokemon) => {
+        pokemon.src = game.getPokemonPicByName(pokemon.name);
       })
     },
     attackSound: new Audio('./assets/attack.mp3'),
@@ -56,13 +62,13 @@ document.addEventListener('alpine:init', () => {
       this.attackSound.currentTime = 0;
       this.attackSound.play()
       this.isDamaged[index] = true
-      setTimeout(()=>{
+      setTimeout(() => {
         this.isDamaged[index] = false
       }, 100)
     },
     switchPokemonOut(index) {
       this.isSwitchingClassName[index] = 'switch-out'
-      setTimeout(()=>{
+      setTimeout(() => {
         this.isSwitchingClassName[index] = 'rotating'
       }, 995)
     },
@@ -77,105 +83,108 @@ document.addEventListener('alpine:init', () => {
         }
       }, 1)
     },
-    nextQueueMsg(){
+    youWinSound: new Audio('./assets/youWin.mp3'),
+    nextQueueMsg() {
       this.queue.shift();
-      this.message=this.queue[0].shift();
-      if(this.message.includes('opposing')&&this.message.includes('fainted')) {
+      this.message = this.queue[0].shift();
+      if (this.message.includes('opposing') && this.message.includes('fainted')) {
+        let elements = document.getElementsByName('Audio')
+        elements.forEach((element)=>{element.pause()})
         this.switchPokemonOut(1)
-        setTimeout(()=>{this.enemyId++;}, 1000);
+        setTimeout(() => {
+          this.enemyId++;
+        }, 1000);
         this.switchPokemonIn(1)
       }
-      if(this.message.includes('Come back!')) this.switchPokemonOut(0);
-      if(this.message.includes('Go!')){
-        let name=this.message.split('!')[1].replace(' ','');
-        this.playerId=this.constData.player.indexOf(this.constData.player.find((pokemon)=>pokemon.name===name));
+      if (this.message.includes('You win')) {
+        this.bgm.pause()
+        this.youWinSound.pause()
+        this.youWinSound.currentTime = 0
+        this.youWinSound.play()
+      }
+      if (this.message.includes('Come back!')) this.switchPokemonOut(0);
+      if (this.message.includes('Go!')) {
+        let name = this.message.split('!')[1].replace(' ', '');
+        this.playerId = this.constData.player.indexOf(this.constData.player.find((pokemon) => pokemon.name === name));
         this.switchPokemonIn(0);
       }
-      let i=0;//i=0~2:player i=4~5:enemy
-      this.queue[0].forEach((data)=>{
-        let list=data.split(' ');
-        let name=list[0];
-        let hp=list[1];
-        console.log(list)
-        if(i<3) this.damagePlayerPokemon(name,hp);
-        else this.damageEnemyPokemon(name,hp);
-        for(let j=1;j<5;j++){
-          let moveName=list[j*2];
-          let movePP=list[j*2+1];
-          console.log(moveName)
-          if(i<3) this.changePlayerMovePP(name, moveName, movePP);
-          else this.changeEnemyMovePP(name, moveName, movePP);
+      let i = 0;//i=0~2:player i=4~5:enemy
+      this.queue[0].forEach((data) => {
+        let list = data.split(' ');
+        let name = list[0];
+        let hp = list[1];
+        if (i < 3) this.damagePlayerPokemon(name, hp); else this.damageEnemyPokemon(name, hp);
+        for (let j = 1; j < 5; j++) {
+          let moveName = list[j * 2];
+          let movePP = list[j * 2 + 1];
+          if (i < 3) this.changePlayerMovePP(name, moveName, movePP); else this.changeEnemyMovePP(name, moveName, movePP);
         }
         let cons = [];
-        for(let j= 10;j<list.length;j++){
-          let con=list[j];
+        for (let j = 10; j < list.length; j++) {
+          let con = list[j];
           cons.push(con);
         }
-        if(i<3) this.givePlayerPokemonCon(name, cons);
-        else this.giveEnemyPokemonCon(name, cons);
+        if (i < 3) this.givePlayerPokemonCon(name, cons); else this.giveEnemyPokemonCon(name, cons);
         i++;
       })
     },
-    damagePlayerPokemon(name,hp){
-      let pokemon=this.dynamicData.player.find(item=>item.name===name);
-      if(pokemon.hp!==hp){
-        if(hp<pokemon.hp) this.damage(0);
-        else this.healSound.play();
-        pokemon.hp=hp;
+    damagePlayerPokemon(name, hp) {
+      let pokemon = this.dynamicData.player.find(item => item.name === name);
+      if (pokemon.hp !== hp) {
+        if (parseInt(hp) < parseInt(pokemon.hp)) this.damage(0);
+        else if (parseInt(hp) > parseInt(pokemon.hp)) this.healSound.play();
+        pokemon.hp = hp;
       }
     },
-    damageEnemyPokemon(name,hp){
-      let pokemon=this.dynamicData.enemy.find(item=>item.name===name);
-      if(pokemon.hp!==hp){
-        if(hp<pokemon.hp) this.damage(1);
-        else this.healSound.play();
-        pokemon.hp=hp;
+    damageEnemyPokemon(name, hp) {
+      let pokemon = this.dynamicData.enemy.find(item => item.name === name);
+      if (pokemon.hp !== hp) {
+        if (parseInt(hp) < parseInt(pokemon.hp)) this.damage(1);
+        else if (parseInt(hp) > parseInt(pokemon.hp)) this.healSound.play();
+        pokemon.hp = hp;
       }
     },
-    changePlayerMovePP(name,moveName,pp){
-      let pokemon=this.dynamicData.player.find(item=>item.name===name);
-      let move=pokemon.moves.find(move=>move.name===moveName);
-      if(move.pp!==pp){
-        move.pp=pp;
+    changePlayerMovePP(name, moveName, pp) {
+      let pokemon = this.dynamicData.player.find(item => item.name === name);
+      let move = pokemon.moves.find(move => move.name === moveName);
+      if (move.pp !== pp) {
+        move.pp = pp;
       }
     },
-    changeEnemyMovePP(name,moveName,pp){
-      let pokemon=this.dynamicData.enemy.find(item=>item.name===name);
-      let move=pokemon.moves.find(move=>move.name===moveName);
-      if(move.pp!==pp){
-        move.pp=pp;
+    changeEnemyMovePP(name, moveName, pp) {
+      let pokemon = this.dynamicData.enemy.find(item => item.name === name);
+      let move = pokemon.moves.find(move => move.name === moveName);
+      if (move.pp !== pp) {
+        move.pp = pp;
       }
     },
-    givePlayerPokemonCon(name, cons){
-      let pokemon = this.dynamicData.player.find(item=>item.name===name);
-      if(pokemon.cons !== cons){
+    givePlayerPokemonCon(name, cons) {
+      let pokemon = this.dynamicData.player.find(item => item.name === name);
+      if (pokemon.cons !== cons) {
         pokemon.cons = cons
       }
     },
-    giveEnemyPokemonCon(name, cons){
-      let pokemon = this.dynamicData.enemy.find(item=>item.name===name);
-      if(pokemon.cons !== cons){
+    giveEnemyPokemonCon(name, cons) {
+      let pokemon = this.dynamicData.enemy.find(item => item.name === name);
+      if (pokemon.cons !== cons) {
         pokemon.cons = cons
       }
     }
   })
 
-  Alpine.store('loading',{
+  Alpine.store('loading', {
     isLoading: true,
     canMainShow: false,
-    bgm: new Audio('./assets/bgm.mp3'),
     buttonSound: new Audio('./assets/buttonSound.mp3'),
     init() {
-      setTimeout(()=>{
+      setTimeout(() => {
         this.isLoading = false
-        this.bgm.play()
-        this.bgm.loop = true
       }, 2500)
-      setTimeout(()=>{
+      setTimeout(() => {
         this.canMainShow = true
       }, 1000)
     },
-    buttonClick(){
+    buttonClick() {
       this.buttonSound.pause()
       this.buttonSound.currentTime = 0;
       this.buttonSound.play()
