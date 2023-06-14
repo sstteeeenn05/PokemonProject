@@ -87,15 +87,18 @@ body {
     padding: 2% 2% 0 2%;
 }
 
-.enemy-pokemon-img {
+.enemy{
     position: absolute;
     right: 20%;
     top: 13%;
     width: 25%;
+}
+
+.enemy-pokemon-img {
+    width: 100%;
     aspect-ratio: 1;
     animation: enemy-in linear 2.5s running;
 }
-
 @keyframes enemy-in {
     0% {
         transform: translateX(-800%);
@@ -108,15 +111,18 @@ body {
     }
 }
 
-.player-pokemon-img {
+.player{
     position: absolute;
     left: 17%;
     bottom: 12%;
     width: 25%;
+}
+
+.player-pokemon-img {
+    width: 100%;
     aspect-ratio: 1;
     animation: player-in linear 2.5s running;
 }
-
 @keyframes player-in {
     0% {
         transform: translateX(800%);
@@ -126,6 +132,18 @@ body {
     }
     100% {
         transform: translateX(0%);
+    }
+}
+
+.damaged{
+    animation: damage 0.1s linear running;
+}
+@keyframes damage {
+    33% {
+        transform: translateX(-2%);
+    }
+    66%{
+        transform: translateX(2%);
     }
 }
 

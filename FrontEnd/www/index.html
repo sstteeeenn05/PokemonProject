@@ -34,9 +34,11 @@
 </div>
 
 <dialog class="input-modal" x-data id="normalModal">
+	<p style="text-align: center; font-size: x-large">Use Current Library?</p>
+	<button class="modal-button manage" @click="$store.modal.close('normalModal'); $store.modal.open('manageModal');">manage</button>
 	<div class="modal-button-section">
 		<button class="modal-button cancel" @click="$store.modal.close('normalModal')">cancel</button>
-		<button class="modal-button confirm">confirm</button>
+		<button class="modal-button confirm" @click="location.href = 'BattleRoom.html'">confirm</button>
 	</div>
 </dialog>
 

@@ -48,6 +48,14 @@
     border: none;
 }
 
+.manage{
+    margin: 10px calc((100% - 300px) / 4);
+    width: calc(300px + (100% - 300px) / 2);
+    color: white;
+    background : #be9800;
+    border: none;
+}
+
 .close{
     display: block;
     margin: auto;
@@ -60,6 +68,14 @@
 
 .confirm:active{
     background: #0a813f;
+}
+
+.manage:hover{
+    background: #a07a00;
+}
+
+.manage:active{
+    background: #8c6600;
 }
 
 .cancel:hover{

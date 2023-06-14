@@ -19,6 +19,7 @@ document.addEventListener('alpine:init', () => {
     playerId:0,
     enemyId:0,
     queue:[],
+    isDamaged: [false, false],
     init(){
       game.start("Test").then((resolve)=>{
         console.log(resolve);
@@ -44,6 +45,13 @@ document.addEventListener('alpine:init', () => {
       pokemons.forEach((pokemon)=>{
         pokemon.src=game.getPokemonPicByName(pokemon.name);
       })
+    },
+    // 0-enemy 1-player
+    damage(index) {
+      this.isDamaged[index] = true
+      setTimeout(()=>{
+        this.isDamaged[index] = false
+      }, 100)
     }
   })
 

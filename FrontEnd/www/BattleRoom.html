@@ -16,12 +16,13 @@
 	<div class="lower"></div>
 </div>
 
-
-
 <div class="main" x-show="$store.loading.canMainShow">
-
-	<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
-	<img class="player-pokemon-img" draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
+	<div class="enemy"  :class="{'damaged' :$store.game.isDamaged[0]}">
+		<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
+	</div>
+	<div class="player" :class="{'damaged' :$store.game.isDamaged[1]}">
+		<img class="player-pokemon-img"  draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
+	</div>
 
 	<div class="enemy-info" :style="{
 		'--health-width':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*100+'%',
