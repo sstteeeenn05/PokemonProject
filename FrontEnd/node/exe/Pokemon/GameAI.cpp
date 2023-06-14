@@ -14,10 +14,12 @@ void GameAI::serve(std::ostream &outputFile) {
         if (command == "Status") {
             outputStatus();
             continue;
-        } else if (command == "Check") {
+        }
+        else if (command == "Check") {
             outputCheck();
             continue;
-        } else if (command == "Run") {
+        }
+        else if (command == "Run") {
             break;
         }
 
@@ -25,15 +27,18 @@ void GameAI::serve(std::ostream &outputFile) {
             if (battle()) {
                 break;
             }
-        } else if (command == "Bag") {
+        }
+        else if (command == "Bag") {
             if (bag()) {
                 break;
             }
-        } else if (command == "Pokemon") {
+        }
+        else if (command == "Pokemon") {
             if (swap()) {
                 break;
             }
-        } else {
+        }
+        else {
             throw InvalidCommandError("unknown command " + command);
         }
 
@@ -48,8 +53,7 @@ void GameAI::computerMove() {
     BattlePokemon &pokemon2 = *opponentPokemonIt;
     bool isOpponent = true;
 
-
-    if (pokemon2.getHp() < 0) {
+    if (pokemon2.isFainting()) {
         computerSwap(pokemon1);
         return;
     }
@@ -68,21 +72,19 @@ void GameAI::computerMove() {
         return;
     }
 
-    // can kill
     Move& mineMaxAct = getBestAction(pokemon1, pokemon2);
-
     move(pokemon2,pokemon1,mineMaxAct, isOpponent);
 }
 
-void GameAI::computerSwap(BattlePokemon &enemy) {
+void GameAI::computerSwap(BattlePokemon &player) {
     string maxPokemonName;
     double maxPokemonDamage = 0;
     bool isOpponent = true;
 
     for (const BattlePokemon &pokemon: opponentPokemonList) {
-        double temp = getBestActionValue(pokemon, enemy);
-        if (maxPokemonDamage < temp) {
-            maxPokemonDamage = temp;
+        const double value = getBestActionValue(player, pokemon);
+        if (maxPokemonDamage < value) {
+            maxPokemonDamage = value;
             maxPokemonName = pokemon.getName();
         }
     }
@@ -97,7 +99,7 @@ Move &GameAI::getBestAction(const BattlePokemon &defender, BattlePokemon &attack
 
     const auto &moves = attacker.getMoveMap();
     for (auto it = moves.cbegin(); it != moves.cend(); ++it) {
-        double damage = getExpectDamage(it->second, defender, attacker);
+        double damage = getExpectDamage(it->second, attacker, defender);
 
         if (damage > maxDamage) {
             maxDamage = damage;
@@ -146,7 +148,7 @@ bool GameAI::battle() {
         throw InvalidCommandError(playerPokemon.getName() + " is fainted, thus must be swapped first");
     }
 
-    string playerMoveName, opponentMoveName;
+    string playerMoveName;
     getline(input, playerMoveName);
 
     Move &playerMove = playerPokemon.getMove(playerMoveName);
@@ -164,19 +166,7 @@ bool GameAI::bag() {
     getline(input, pokemonName);
     playerUsePotion(potionName, pokemonName);
     outputPotion(pokemonName, potionName, false);
-    return true;
-    /*
-    string opponentMoveName;
-    getline(input, opponentMoveName);
-
-    BattlePokemon &playerPokemon = playerPokemonIt->second;
-    BattlePokemon &opponentPokemon = * opponentPokemonIt;
-    Move &opponentMove = opponentPokemon.getMove(opponentMoveName);
-
-    if (move(opponentPokemon, playerPokemon, opponentMove, true)) {
-        return true;
-    }
-    return performStatus();*/
+    return performStatus();
 }
 
 bool GameAI::swap() {
@@ -187,19 +177,7 @@ bool GameAI::swap() {
         outputComeBack(playerPokemonIt->second.getName(), false);
     }
     outputGo(pokemonName, false);
-    return true;
-    /*
-    string opponentMoveName;
-    getline(input, opponentMoveName);
-
-    BattlePokemon &playerPokemon = playerPokemonIt->second;
-    BattlePokemon &opponentPokemon = * opponentPokemonIt;
-    Move &opponentMove = opponentPokemon.getMove(opponentMoveName);
-
-    if (move(opponentPokemon, playerPokemon, opponentMove, true)) {
-        return true;
-    }
-    return performStatus();*/
+    return performStatus();
 }
 
 bool GameAI::performStatus() {
@@ -223,10 +201,9 @@ bool GameAI::checkWin(const bool isOpponent) {
             outputFainted(opponentPokemonIt->getName(), true);
             ++opponentPokemonIt;
             if (opponentPokemonIt == opponentPokemonList.cend()) {
-                outputWin(true);
+                outputWin(false);
                 return true;
             }
-            outputGo(opponentPokemonIt->getName(), true);
         }
         return false;
     } else {
@@ -237,7 +214,7 @@ bool GameAI::checkWin(const bool isOpponent) {
                     return false;
                 }
             }
-            outputWin(false);
+            outputWin(true);
             return true;
         }
         return false;
