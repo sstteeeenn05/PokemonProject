@@ -81,6 +81,10 @@ document.addEventListener('alpine:init', () => {
     nextQueueMsg() {
       this.queue.shift();
       this.message = this.queue[0].shift();
+      if (!this.message) {
+        alert("Game End")
+        location.href = '/'
+      }
       if (this.message.includes('opposing') && this.message.includes('fainted')) {
         let elements = document.getElementsByName('Audio')
         elements.forEach((element)=>{element.pause()})
