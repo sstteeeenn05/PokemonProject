@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
       if(this.message.includes('Come back!')) this.switchPokemonOut(0);
       if(this.message.includes('Go!')){
         let name=this.message.split('!')[1].replace(' ','');
-        this.playerId=this.constData.player.indexOf(this.constData.player.find((pokemon)=>pokemon.name==name));
+        this.playerId=this.constData.player.indexOf(this.constData.player.find((pokemon)=>pokemon.name===name));
         this.switchPokemonIn(0);
       }
       let i=0;//i=0~2:player i=4~5:enemy
@@ -97,53 +97,60 @@ document.addEventListener('alpine:init', () => {
         for(let j=2;j<6;j++){
           let moveName=list[j*2];
           let movePP=list[j*2+1];
+          if(i<3) this.changePlayerMovePP(name, moveName, movePP);
+          else this.changeEnemyMovePP(name, moveName, movePP);
         }
-        for(let j=12;j<list.length;j++){
+        for(let j= 10;j<list.length;j++){
           let con=list[j];
+          if(i<3) this.givePlayerPokemonCon(name, con);
+          else this.giveEnemyPokemonCon(name, con);
         }
         i++;
       })
     },
     damagePlayerPokemon(name,hp){
-      let pokemon=this.dynamicData.player.find(item=>item.name==name);
+      let pokemon=this.dynamicData.player.find(item=>item.name===name);
       console.log(pokemon);
-      if(pokemon.hp!=hp){
+      if(pokemon.hp!==hp){
         if(hp<pokemon.hp) this.damage(0);
         else this.healSound.play();
         pokemon.hp=hp;
       }
     },
     damageEnemyPokemon(name,hp){
-      let pokemon=this.dynamicData.enemy.find(item=>item.name==name);
-      if(pokemon.hp!=hp){
+      let pokemon=this.dynamicData.enemy.find(item=>item.name===name);
+      if(pokemon.hp!==hp){
         if(hp<pokemon.hp) this.damage(1);
         else this.healSound.play();
         pokemon.hp=hp;
       }
     },
     changePlayerMovePP(name,moveName,pp){
-      let id=this.constData.player.find(item=>item.name==name);
-      let pokemon=this.dynamicData.player[id];
-      let moveId=pokemon.moves.find(move=>move.name==moveName);
-      let move=pokemon.moves[moveId];
-      if(move.pp!=pp){
+      let pokemon=this.constData.player.find(item=>item.name===name);
+      let move=pokemon.moves.find(move=>move.name===moveName);
+      console.log(moveName)
+      if(move.pp!==pp){
         move.pp=pp;
       }
     },
     changeEnemyMovePP(name,moveName,pp){
-      let id=this.constData.enemy.find(item=>item.name==name);
-      let pokemon=this.dynamicData.player[id];
-      let moveId=pokemon.moves.find(move=>move.name==moveName);
-      let move=pokemon.moves[moveId];
-      if(move.pp!=pp){
+      let pokemon=this.constData.enemy.find(item=>item.name===name);
+      let move=pokemon.moves.find(move=>move.name===moveName);
+      if(move.pp!==pp){
         move.pp=pp;
       }
     },
-    givePlayerPokemonCon(con){
-
+    givePlayerPokemonCon(name, cons){
+      let pokemon=this.constData.player.find(item=>item.name===name);
+      if(pokemon.cons !== cons){
+        pokemon.cons = cons
+      }
     },
-    giveEnemyPokemonCon(con){
-
+    giveEnemyPokemonCon(name, cons){
+      let pokemon=this.constData.enemy.find(item=>item.name===name);
+      if(pokemon.cons !== cons){
+        pokemon.cons = cons
+      }
     }
   })
 
