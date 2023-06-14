@@ -1,5 +1,5 @@
 #include "GameTest.h"
-#include <queue>
+#include <sstream>
 
 GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFileName,
                    const std::string &gameDataFileName, std::istream &input) :
@@ -10,8 +10,8 @@ GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFi
 
 void GameTest::serve() {
     turn = 0;
-    queue<string> outputs;
-    for (string command; getline(input, command); flushOutputs()) {
+    stringstream stream;
+    for (string command; getline(input, command); flushOutputs(stream)) {
         if (command == "Status") {
             outputStatus();
             continue;
@@ -39,7 +39,8 @@ void GameTest::serve() {
             throw InvalidCommandError("unknown command " + command);
         }
     }
-    flushOutputs();
+    flushOutputs(stream);
+    cout << stream.str() << endl;
 }
 
 bool GameTest::battle() {

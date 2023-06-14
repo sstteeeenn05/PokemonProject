@@ -185,13 +185,13 @@ void GameBase::outputWin(const bool isOpponent) {
     outputs.emplace(isOpponent ? "You lose" : "You win");
 }
 
-void GameBase::flushOutputs() {
+void GameBase::flushOutputs(std::ostream &out) {
     const std::string prefix = "[Turn " + std::to_string(turn) + "] ";
     while (!outputs.empty()) {
         std::string output = outputs.front();
-        std::cout << prefix << output << ';';
+        out << prefix << output << ';';
+        outputs.pop();
     }
-    std::cout << std::endl;
 }
 
 void GameBase::playerSwapPokemon(const std::string &pokemonName) {

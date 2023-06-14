@@ -56,7 +56,7 @@ protected:
     void outputComeBack(const std::string &pokemonName, bool isOpponent);
     void outputGo(const std::string &pokemonName, bool isOpponent);
     void outputWin(bool isOpponent);
-    void flushOutputs();
+    void flushOutputs(std::ostream &out);
 
     void playerSwapPokemon(const std::string &pokemonName);
     void opponentSwapPokemon(const std::string &pokemonName);
