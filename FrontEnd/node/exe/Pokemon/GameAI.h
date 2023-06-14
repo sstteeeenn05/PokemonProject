@@ -5,13 +5,17 @@
 using namespace std;
 
 class GameAI: public GameBase{
-    GameAI(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName) :
-            GameBase(pokemonFileName, moveFileName, gameDataFileName) {};
+private:
+    istream &input;
+
+public:
+    GameAI(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName,
+             istream &input);
 
     void serve() override;
 
-    void calc();
-    int getDamage(Move& move,Pokemon& attacker, Pokemon& defender);
+    void battle();
+    static int getDamage(Move& move,Pokemon& attacker, Pokemon& defender);
 
     Move& atk( BattlePokemon& token, BattlePokemon& enemy);
 };

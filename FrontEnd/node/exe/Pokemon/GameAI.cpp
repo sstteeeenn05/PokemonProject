@@ -1,24 +1,30 @@
 #include "GameAI.h"
 
-#include <queue>
+#include <sstream>
 
 using namespace std;
 
 void GameAI::serve() {
-    queue<string> outputs;
-    for (string command; getline(cin, command);) {
+    stringstream stream;
+    for (string command; getline(input, command); flushOutputs(stream)) {
+        if (command == "Status") {
+            outputStatus();
+            continue;
+        } else if (command == "Check") {
+            outputCheck();
+            continue;
+        } else if (command == "Run") {
+            break;
+        }
+
         if (command == "Battle") {
-            string moveName1;
-            getline(cin, moveName1);
-
-            BattlePokemon &pokemon1 = playerPokemonIt->second;
-            BattlePokemon &pokemon2 = *opponentPokemonIt;
-            Move &move1 = pokemon1.getMove(moveName1);
-
-            //int damage1 = move1.calcDamage(pokemon1, pokemon2);
-            calc();
+           battle();
+        }else {
+            throw InvalidCommandError("unknown command " + command);
         }
     }
+    flushOutputs(stream);
+    cout << stream.str() << endl;
 }
 
 Move& GameAI::atk( BattlePokemon& token, BattlePokemon& enemy){
@@ -41,7 +47,7 @@ Move& GameAI::atk( BattlePokemon& token, BattlePokemon& enemy){
 }
 
 
-void GameAI::calc(){
+void GameAI::battle(){
     BattlePokemon &pokemon1 = playerPokemonIt->second;
     BattlePokemon &pokemon2 = *opponentPokemonIt;
 
@@ -51,18 +57,41 @@ void GameAI::calc(){
     int maxOpponentDamage = getDamage(opponentMaxAct,pokemon1,pokemon2);
 
     if(maxOpponentDamage>pokemon2.getHp()){
-        //use poision
+        //use potion
         opponentUsePotion(pokemon2.getName(),"Hyper Potion");
     }
 
     // can kill
     Move& mineMaxAct = atk(pokemon2,pokemon1);
 
-    if(getDamage(mineMaxAct,pokemon2,pokemon1) > pokemon1.getHp()){
-        //TODO:do move
+    const int damage = getDamage(mineMaxAct,pokemon2,pokemon1);
+
+    mineMaxAct.use();
+    bool isOpponent = true;
+    outputMove(pokemon2.getName(), mineMaxAct.getName(), isOpponent);
+    if (pokemon2.hasStatus(Status::PARALYSIS)) {
+        outputParalyzed(pokemon2.getName(), isOpponent);
+        //return false;
+    }
+
+    const int baseDamage = mineMaxAct.calcBaseDamage(pokemon2, pokemon1);
+    const double stab = mineMaxAct.calcSTAB(pokemon1.getTypeList());
+    const double typeEffect = mineMaxAct.calcTypeEffect(pokemon1.getTypeList());
+    outputTypeEffect(typeEffect);
+
+    if (mineMaxAct.getAdditionalEffect() != Status::NONE) {
+        pokemon1.addStatus(mineMaxAct.getAdditionalEffect());
+        outputAdditionalEffect(pokemon2.getName(), mineMaxAct.getAdditionalEffect(), isOpponent);
     }
 
 
+    pokemon1.damage(damage);
+
+
+
+
+
+/*
     //the most damage
     int maxDamage;
     bool needSwap = 0;
@@ -83,11 +112,11 @@ void GameAI::calc(){
       //  opponentSwapPokemon(temp);
     //}
     //else {
+//TODO: do move
 
-        //TODO: do move
    // }
     //if (pokemon2.getHp() /  > pokemon1.getHp() / mineMaxAct.calcDamage(pokemon2,pokemon1))return;
-
+*/
 }
 
 int GameAI::getDamage(Move& move,Pokemon& attacker, Pokemon& defender) {
@@ -97,4 +126,3 @@ int GameAI::getDamage(Move& move,Pokemon& attacker, Pokemon& defender) {
     const int damage = static_cast<int>(baseDamage * stab * typeEffect);
     return damage;
 }
-
