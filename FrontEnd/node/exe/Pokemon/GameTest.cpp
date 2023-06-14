@@ -10,9 +10,9 @@ GameTest::GameTest(const std::string &pokemonFileName, const std::string &moveFi
 }
 
 void GameTest::serve() {
-    turn = 0;
-    stringstream stream;
-    for (string command; getline(input, command); flushOutputs(stream)) {
+    turn = 1;
+    ofstream outputFile("TestOutput.txt");
+    for (string command; getline(input, command);) {
         if (command == "Status") {
             outputStatus();
             continue;
@@ -23,7 +23,6 @@ void GameTest::serve() {
             break;
         }
 
-        ++turn;
         if (command == "Battle") {
             if (battle()) {
                 break;
@@ -39,11 +38,11 @@ void GameTest::serve() {
         } else {
             throw InvalidCommandError("unknown command " + command);
         }
+        flushOutputs(outputFile);
+        ++turn;
     }
-    flushOutputs(stream);
-    std::ofstream file("TestOutput.txt");
-    file << stream.str() << endl;
-    file.close();
+    flushOutputs(outputFile);
+    outputFile.close();
 }
 
 bool GameTest::battle() {
@@ -62,14 +61,24 @@ bool GameTest::battle() {
 
     // both move
     if (playerPokemon.isFaster(opponentPokemon)) {
-        if (move(playerPokemon, opponentPokemon, playerMove, false) ||
-            move(opponentPokemon, playerPokemon, opponentMove, true)) {
-            return true;
+        if (move(playerPokemon, opponentPokemon, playerMove, false)) {
+            if (checkWin(false)) {
+                return true;
+            }
+        } else if (move(opponentPokemon, playerPokemon, opponentMove, true)) {
+            if (checkWin(true)) {
+                return true;
+            }
         }
     } else {
-        if (move(opponentPokemon, playerPokemon, opponentMove, true) ||
-            move(playerPokemon, opponentPokemon, playerMove, false)) {
-            return true;
+        if (move(opponentPokemon, playerPokemon, opponentMove, true)) {
+            if (checkWin(true)) {
+                return true;
+            }
+        } else if (move(playerPokemon, opponentPokemon, playerMove, false)) {
+            if (checkWin(false)) {
+                return true;
+            }
         }
     }
     return performStatus();
@@ -92,7 +101,7 @@ bool GameTest::bag() {
     BattlePokemon &opponentPokemon = * opponentPokemonIt;
     Move &opponentMove = opponentPokemon.getMove(opponentMoveName);
 
-    if (move(opponentPokemon, playerPokemon, opponentMove, true)) {
+    if (move(opponentPokemon, playerPokemon, opponentMove, true) && checkWin(true)) {
         return true;
     }
     return performStatus();
@@ -101,10 +110,10 @@ bool GameTest::bag() {
 bool GameTest::swap() {
     string pokemonName;
     getline(input, pokemonName);
-    playerSwapPokemon(pokemonName);
     if (!playerPokemonIt->second.isFainting()) {
         outputComeBack(playerPokemonIt->second.getName(), false);
     }
+    playerSwapPokemon(pokemonName);
     outputGo(pokemonName, false);
 
     string opponentMoveName;
@@ -122,25 +131,27 @@ bool GameTest::swap() {
 
 bool GameTest::move(const Pokemon &attacker, Pokemon &defender, Move &move, const bool isOpponent) {
     move.use();
-    outputMove(attacker.getName(), move.getName(), isOpponent);
     if (attacker.hasStatus(Status::PARALYSIS)) {
         outputParalyzed(attacker.getName(), isOpponent);
         return false;
     }
 
     const int baseDamage = move.calcBaseDamage(attacker, defender);
-    const double stab = move.calcSTAB(defender.getTypeList());
+    const double stab = move.calcSTAB(attacker.getTypeList());
     const double typeEffect = move.calcTypeEffect(defender.getTypeList());
-    outputTypeEffect(typeEffect);
-
-    if (move.getAdditionalEffect() != Status::NONE) {
-        defender.addStatus(move.getAdditionalEffect());
-        outputAdditionalEffect(defender.getName(), move.getAdditionalEffect(), isOpponent);
-    }
+    defender.addStatus(move.getAdditionalEffect());
 
     const int damage = static_cast<int>(baseDamage * stab * typeEffect);
     defender.damage(damage);
-    return checkWin(isOpponent);
+
+    outputMove(attacker.getName(), move.getName(), isOpponent);
+    if (move.getDamageType() != DamageType::STATUS) {
+        outputTypeEffect(typeEffect);
+    }
+    if (move.getAdditionalEffect() != Status::NONE) {
+        outputAdditionalEffect(defender.getName(), move.getAdditionalEffect(), !isOpponent);
+    }
+    return defender.isFainting();
 }
 
 bool GameTest::performStatus() {
@@ -149,13 +160,21 @@ bool GameTest::performStatus() {
 
     playerPokemon.performStatus();
     opponentPokemon.performStatus();
-    for (const Status status: playerPokemon.getStatusList()) {
-        outputPerformStatus(playerPokemon.getName(), status, false);
+    if (checkWin(false) || checkWin(true)) {
+        return true;
     }
-    for (const Status status: opponentPokemon.getStatusList()) {
-        outputPerformStatus(opponentPokemon.getName(), status, true);
+
+    if (!playerPokemon.isFainting()) {
+        for (const Status status: playerPokemon.getStatusList()) {
+            outputPerformStatus(playerPokemon.getName(), status, false);
+        }
     }
-    return checkWin(false) || checkWin(true);
+    if (!opponentPokemon.isFainting()) {
+        for (const Status status: opponentPokemon.getStatusList()) {
+            outputPerformStatus(opponentPokemon.getName(), status, true);
+        }
+    }
+    return false;
 }
 
 bool GameTest::checkWin(const bool isOpponent) {
@@ -164,10 +183,9 @@ bool GameTest::checkWin(const bool isOpponent) {
             outputFainted(opponentPokemonIt->getName(), true);
             ++opponentPokemonIt;
             if (opponentPokemonIt == opponentPokemonList.cend()) {
-                outputWin(true);
+                outputWin(false);
                 return true;
             }
-            outputGo(opponentPokemonIt->getName(), true);
         }
         return false;
     } else {
@@ -178,7 +196,7 @@ bool GameTest::checkWin(const bool isOpponent) {
                     return false;
                 }
             }
-            outputWin(false);
+            outputWin(true);
             return true;
         }
         return false;

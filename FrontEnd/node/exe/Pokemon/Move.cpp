@@ -25,9 +25,9 @@ Move Move::fromInput(std::istream &input, std::string name) {
     std::getline(input, line);
     std::stringstream stream(line);
 
-    stream >> typeName >> damageTypeName >> power >> accuracy >> powerPoint;
+    stream >> typeName >> damageTypeName >> power >> accuracy >> powerPoint >> statusName;
     return {std::move(name), TypeMap.at(typeName), DamageTypeMap.at(damageTypeName),
-            power, accuracy, powerPoint, statusName.empty() ? Status::NONE : StatusMap.at(statusName.substr(1))};
+            power, accuracy, powerPoint, statusName.empty() ? Status::NONE : StatusMap.at(statusName)};
 }
 
 const std::string &Move::getName() const {
@@ -64,12 +64,12 @@ int Move::calcBaseDamage(const Pokemon &attacker, const Pokemon &defender) const
     }
 
     const int attack = damageType == DamageType::PHYSICAL ? attacker.getAttack() : attacker.getSpecialAttack();
-    const int defense = damageType == DamageType::PHYSICAL ? defender.getDefense() : attacker.getSpecialDefense();
-    return static_cast<int>(((attacker.getLevel() << 1) + 10) * power * attack / 250.0 / defense) + 2;
+    const int defense = damageType == DamageType::PHYSICAL ? defender.getDefense() : defender.getSpecialDefense();
+    return int(((attacker.getLevel() << 1) + 10) * power * attack / 250.0 / defense) + 2;
 }
 
-double Move::calcSTAB(const std::set<Type> &defenderTypeList) const {
-    return defenderTypeList.find(type) != defenderTypeList.cend() ? 1.5 : 1.0;
+double Move::calcSTAB(const std::set<Type> &attackerTypeList) const {
+    return attackerTypeList.find(type) != attackerTypeList.cend() ? 1.5 : 1.0;
 }
 
 double Move::calcTypeEffect(const std::set<Type> &defenderTypeList) const {

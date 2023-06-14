@@ -29,7 +29,7 @@ public:
     [[nodiscard]] const Status &getAdditionalEffect() const;
 
     [[nodiscard]] int calcBaseDamage(const Pokemon &attacker, const Pokemon &defender) const;
-    [[nodiscard]] double calcSTAB(const std::set<Type> &defenderTypeList) const;
+    [[nodiscard]] double calcSTAB(const std::set<Type> &attackerTypeList) const;
     [[nodiscard]] double calcTypeEffect(const std::set<Type> &defenderTypeList) const;
     [[nodiscard]] bool canUse() const;
 

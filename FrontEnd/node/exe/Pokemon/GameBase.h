@@ -17,6 +17,7 @@ public:
     Move &getMove(const std::string &moveName) {
         const auto it = moveMap.find(moveName);
         if (it == moveMap.cend()) {
+            std::cout << name << std::endl;
             throw MoveNotFoundError(moveName);
         }
         return it->second;
@@ -42,6 +43,7 @@ protected:
     std::queue<std::string> outputs;
 
     static std::string opponentPrefix(const std::string &pokemonName, bool isOpponent = true);
+    void addOutput(const std::string &message);
     void outputParalyzed(const std::string &attackerName, bool isOpponent);
     void outputMove(const std::string &attackerName, const std::string &moveName, bool isOpponent);
     void outputAvoid(const std::string &defenderName, bool isOpponent);

@@ -90,44 +90,65 @@ std::string GameBase::opponentPrefix(const std::string &pokemonName, const bool 
     return isOpponent ? "The opposing " + pokemonName : pokemonName;
 }
 
+void GameBase::addOutput(const std::string &message) {
+    std::stringstream stream;
+    stream << message;
+    for (const auto &pokemonPair: playerPokemonMap) {
+        stream << '$' << pokemonPair.first << ' ' << pokemonPair.second.getHp();
+        for (const auto &movePair: pokemonPair.second.getMoveMap()) {
+            stream << ' ' << movePair.second.getName() << ' ' << movePair.second.getPowerPoint();
+        }
+        stream << pokemonPair.second.getStatusString();
+    }
+
+    for (const BattlePokemon &pokemon: opponentPokemonList) {
+        stream << '$' << pokemon.getName() << ' ' << pokemon.getHp();
+        for (const auto &movePair: pokemon.getMoveMap()) {
+            stream << ' ' << movePair.second.getName() << ' ' << movePair.second.getPowerPoint();
+        }
+        stream << pokemon.getStatusString();
+    }
+    outputs.emplace(stream.str());
+}
+
 void GameBase::outputParalyzed(const std::string &attackerName, const bool isOpponent) {
-    outputs.emplace(opponentPrefix(attackerName, isOpponent) + " is paralyzed!");
-    outputs.emplace("It can't move!");
+    addOutput(opponentPrefix(attackerName, isOpponent) + " is paralyzed!");
+    addOutput("It can't move!");
 }
 
 void GameBase::outputMove(const std::string &attackerName, const std::string &moveName, const bool isOpponent) {
-    outputs.emplace(opponentPrefix(attackerName, isOpponent) + " used " + moveName + '!');
+    addOutput(opponentPrefix(attackerName, isOpponent) + " used " + moveName + '!');
 }
 
 void GameBase::outputAvoid(const std::string &defenderName, const bool isOpponent) {
-    outputs.emplace(opponentPrefix(defenderName, isOpponent) + " avoid the attack!");
+    addOutput(opponentPrefix(defenderName, isOpponent) + " avoid the attack!");
 }
 
 void GameBase::outputTypeEffect(const double effect) {
     if (effect >= 2.0) {
-        outputs.emplace("It's super effective!");
+        addOutput("It's super effective!");
     } else if (effect <= 0.5) {
-        outputs.emplace("It's not very effective...");
-    } else {
-        outputs.emplace("It's not effective!");
+        addOutput("It's not very effective...");
+    } else if (effect == 0.0) {
+        addOutput("It's not effective!");
     }
 }
 
 void GameBase::outputCriticalHit() {
-    outputs.emplace("A critical hit!");
+    addOutput("A critical hit!");
 }
 
 void GameBase::outputAdditionalEffect(const std::string &defenderName, const Status status, const bool isOpponent) {
     const std::string pokemonName = opponentPrefix(defenderName, isOpponent);
     switch (status) {
         case Status::PARALYSIS:
-            outputs.emplace(pokemonName + " is paralyzed, so it may be unable to move!");
+            addOutput(pokemonName + " is paralyzed, so it may be unable to move!");
             break;
         case Status::BURN:
-            outputs.emplace(pokemonName + " was burned!");
+            addOutput(pokemonName + " was burned!");
             break;
         case Status::POISON:
-            outputs.emplace(pokemonName + " was poisoned!");
+            addOutput(pokemonName + " was poisoned!");
             break;
         default:
             break;
@@ -136,60 +157,65 @@ void GameBase::outputAdditionalEffect(const std::string &defenderName, const Sta
 
 void GameBase::outputPerformStatus(const std::string &pokemonName, Status status, const bool isOpponent) {
     if (status == Status::BURN) {
-        outputs.emplace(opponentPrefix(pokemonName, isOpponent) + " is hurt by its burn!");
+        addOutput(opponentPrefix(pokemonName, isOpponent) + " is hurt by its burn!");
     } else if (status == Status::POISON) {
-        outputs.emplace(opponentPrefix(pokemonName, isOpponent) + " is hurt by its poisoning!");
+        addOutput(opponentPrefix(pokemonName, isOpponent) + " is hurt by its poisoning!");
     }
 }
 
 void GameBase::outputStatus() {
-    outputs.emplace(playerPokemonIt->second.getStatusString() + ' ' + opponentPokemonIt->getStatusString());
+    const BattlePokemon &playerPokemon = playerPokemonIt->second;
+    const BattlePokemon &opponentPokemon = * opponentPokemonIt;
+    addOutput(playerPokemon.getName() + ' ' + std::to_string(playerPokemon.getHp()) +
+              playerPokemon.getStatusString() + ' ' +
+              opponentPokemon.getName() + ' ' + std::to_string(opponentPokemon.getHp()) +
+              opponentPokemon.getStatusString());
 }
 
 void GameBase::outputCheck() {
     std::stringstream stream;
-    for (const auto &pair : playerPokemonIt->second.getMoveMap()) {
-        stream << pair.second.getName() << ' ' << pair.second.getPowerPoint();
+    for (const auto &pair: playerPokemonIt->second.getMoveMap()) {
+        stream << pair.second.getName() << ' ' << pair.second.getPowerPoint() << ' ';
     }
-    outputs.emplace(stream.str());
+    addOutput(stream.str());
 }
 
 void GameBase::outputPotion(const std::string &pokemonName, const std::string &potionName, const bool isOpponent) {
-    outputs.emplace(std::string(isOpponent ? "Opponent" : "You") + " used a " + potionName + '!');
-    outputs.emplace(opponentPrefix(pokemonName, isOpponent) + " had its HP restored.");
+    addOutput(std::string(isOpponent ? "Opponent" : "You") + " used a " + potionName + '!');
+    addOutput(opponentPrefix(pokemonName, isOpponent) + " had its HP restored.");
 }
 
 void GameBase::outputFainted(const std::string &defenderName, const bool isOpponent) {
-    outputs.emplace(opponentPrefix(defenderName, isOpponent) + " is fainted");
+    addOutput(opponentPrefix(defenderName, isOpponent) + " fainted!");
 }
 
 void GameBase::outputComeBack(const std::string &pokemonName, const bool isOpponent) {
     if (isOpponent) {
-        outputs.emplace("(Opponent) " + pokemonName + ", switch out!");
-        outputs.emplace("(Opponent) Come back!");
+        addOutput("(Opponent) " + pokemonName + ", switch out!");
+        addOutput("(Opponent) Come back!");
     } else {
-        outputs.emplace(pokemonName + ", switch out!");
-        outputs.emplace("Come back!");
+        addOutput(pokemonName + ", switch out!");
+        addOutput("Come back!");
     }
 }
 
 void GameBase::outputGo(const std::string &pokemonName, const bool isOpponent) {
     if (isOpponent) {
-        outputs.emplace("(Opponent) Go! " + pokemonName + '!');
+        addOutput("(Opponent) Go! " + pokemonName + '!');
     } else {
-        outputs.emplace("Go! " + pokemonName + '!');
+        addOutput("Go! " + pokemonName + '!');
     }
 }
 
 void GameBase::outputWin(const bool isOpponent) {
-    outputs.emplace(isOpponent ? "You lose" : "You win");
+    addOutput(isOpponent ? "You lose" : "You win");
 }
 
 void GameBase::flushOutputs(std::ostream &out) {
     const std::string prefix = "[Turn " + std::to_string(turn) + "] ";
     while (!outputs.empty()) {
         std::string output = outputs.front();
-        out << prefix << output << ';';
+        out << prefix << output << ';' << std::endl;
         outputs.pop();
     }
 }

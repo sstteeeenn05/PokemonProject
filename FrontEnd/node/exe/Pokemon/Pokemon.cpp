@@ -92,8 +92,7 @@ bool Pokemon::isFaster(const Pokemon &pokemon) const {
 }
 
 std::string Pokemon::getStatusString() const {
-    std::stringstream stream(name);
-    stream << ' ' << hp;
+    std::stringstream stream;
     for (const Status status : statusList) {
         stream << ' ' << StatusName[static_cast<size_t>(status)];
     }
