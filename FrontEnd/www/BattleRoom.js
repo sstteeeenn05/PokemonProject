@@ -7,10 +7,19 @@ let game=new Game();
 
 document.addEventListener('alpine:init', () => {
   Alpine.store('game',{
-    data:{},
+    myPokemons:[],
+    opponentPokemons:[],
     initData(){
       game.initData().then((resolve)=>{
-        this.data=resolve;
+        this.myPokemons=resolve.myPokemons;
+        parsePicture(this.myPokemons);
+        this.opponentPokemons=resolve.opponentPokemons;
+        parsePicture(this.opponentPokemons);
+      })
+    },
+    parsePicture(pokemons){
+      pokemons.forEach((pokemon)=>{
+        pokemon.src=game.getPokemonPicByName(pokemon.name);
       })
     }
   })
