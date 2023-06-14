@@ -20,7 +20,7 @@ document.addEventListener('alpine:init', () => {
     playerId:0,
     enemyId:0,
     isDamaged: [false, false],
-    isChanging: [false, false],
+    isSwitchingClassName: ['', ''],
     queue:[[]],
     message:"You Enter A Battle!",
     init(){
@@ -57,11 +57,17 @@ document.addEventListener('alpine:init', () => {
         this.isDamaged[index] = false
       }, 100)
     },
-    showChangePokemon(index) {
-      this.isChanging[index] = true
+    switchPokemonOut(index) {
+      this.isSwitchingClassName[index] = 'switch-out'
       setTimeout(()=>{
-        this.isChanging[index] = false
-      }, 2000)
+        this.isSwitchingClassName[index] = 'rotating'
+      }, 999)
+    },
+    switchPokemonIn(index) {
+      this.isSwitchingClassName[index] = 'switch-in'
+      setTimeout(()=>{
+        this.isSwitchingClassName[index] = ''
+      }, 999)
     },
     nextQueueMsg(){
       this.queue.shift();

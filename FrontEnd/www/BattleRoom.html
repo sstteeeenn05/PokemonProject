@@ -16,16 +16,19 @@
 	<div class="lower"></div>
 </div>
 
+<button @click="$store.game.switchPokemonIn(1)">in</button>
+<button @click="$store.game.switchPokemonOut(1)">out</button>
+
 <div class="main" x-show="$store.loading.canMainShow">
 	<div class="enemy"  :class="{'damaged' :$store.game.isDamaged[1]}">
 		<img class="enemy-pokemon-img" draggable="false" :src="$store.game.constData.enemy[$store.game.enemyId].src">
 	</div>
-	<img class="enemy-cover" draggable="false" src="./assets/Pokeball.png" :class="{'changing' :$store.game.isChanging[1]}">
+	<img class="enemy-cover" draggable="false" src="./assets/Pokeball.png" :class="$store.game.isSwitchingClassName[1]">
 
 	<div class="player" :class="{'damaged' :$store.game.isDamaged[0]}">
 		<img class="player-pokemon-img"  draggable="false" :src="$store.game.constData.player[$store.game.playerId].src">
 	</div>
-	<img class="player-cover" draggable="false" src="./assets/Pokeball.png" :class="{'changing' :$store.game.isChanging[0]}">
+	<img class="player-cover" draggable="false" src="./assets/Pokeball.png" :class="$store.game.isSwitchingClassName[0]">
 
 	<div class="enemy-info" :style="{
 		'--health-width':$store.game.dynamicData.enemy[$store.game.enemyId].hp/$store.game.constData.enemy[$store.game.enemyId].hp*100+'%',

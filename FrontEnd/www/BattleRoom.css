@@ -107,7 +107,7 @@ body {
 .enemy-pokemon-img {
     width: 100%;
     aspect-ratio: 1;
-    animation: enemy-in linear 2.5s running;
+    animation: enemy-in ease-out 2.5s running;
 }
 @keyframes enemy-in {
     0% {
@@ -140,7 +140,7 @@ body {
 .player-pokemon-img {
     width: 100%;
     aspect-ratio: 1;
-    animation: player-in linear 2.5s running;
+    animation: player-in ease-out 2.5s running;
 }
 @keyframes player-in {
     0% {
@@ -154,20 +154,45 @@ body {
     }
 }
 
-.changing{
-    animation: change 2s linear running;
+.switch-out{
+    opacity: 1;
+    animation: switch-out 1s linear running;
 }
-@keyframes change {
+@keyframes switch-out {
     0%{
         transform: scale(0);
-        opacity: 1;
+    }
+    100%{
+        transform: scale(150%) rotate(360deg);
+    }
+}
+
+.rotating{
+    opacity: 1;
+    animation: rotating 1s linear infinite;
+}
+@keyframes rotating {
+    0%{
+        transform: scale(150%) rotate(0deg);
     }
     50%{
         transform: scale(150%) rotate(180deg);
     }
     100%{
+        transform: scale(150%) rotate(360deg);
+    }
+}
+
+.switch-in{
+    opacity: 1;
+    animation: switch-in 1s linear running;
+}
+@keyframes switch-in {
+    0%{
+        transform: scale(150%) rotate(0);
+    }
+    100%{
         transform: scale(0) rotate(360deg);
-        opacity: 1;
     }
 }
 
