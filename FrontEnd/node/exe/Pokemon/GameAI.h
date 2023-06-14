@@ -4,13 +4,15 @@
 
 using namespace std;
 
-class GameAI : public GameBase {
+class GameAI: public GameBase{
+    GameAI(const std::string &pokemonFileName, const std::string &moveFileName, const std::string &gameDataFileName) :
+            GameBase(pokemonFileName, moveFileName, gameDataFileName) {};
 
+    void serve() override;
 
+    void calc();
+    int getDamage(Move& move,Pokemon& attacker, Pokemon& defender);
 
-    const Pokemon &getBestPokemon(const vector<Pokemon> &pokemonList) {
-        return *max_element(pokemonList.cbegin(), pokemonList.cend(), [](const Pokemon &pokemon1, const Pokemon &pokemon2) {
-            return true;
-        });
-    }
+    Move& atk( BattlePokemon& token, BattlePokemon& enemy);
 };
+
