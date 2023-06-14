@@ -27,9 +27,9 @@ document.addEventListener('alpine:init', () => {
       })
       game.initData().then((resolve)=>{
         this.constData=resolve;
+        this.dynamicData=resolve;
         this.parsePicture(this.constData.player);
         this.parsePicture(this.constData.enemy);
-        this.dynamicData=this.constData;
       })
     },
     parsePicture(pokemons){
