@@ -96,7 +96,7 @@
 	<div class="data-list">
 
 		<div class="fight-selection-section" x-show="$store.modal.type === 'fight'">
-			<template x-for="(move,index) in $store.game.constData.player[0].moves" :key="index">
+			<template x-for="(move,index) in $store.game.constData.player[$store.game.playerId].moves" :key="index">
 				<div class="fight-data">
 					<div class="skill-title">
 						<h2 x-text="move.name" style="margin: 0; display: inline-block"></h2>
